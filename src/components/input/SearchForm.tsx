@@ -32,20 +32,20 @@ export function SearchForm({ onSearch, onLoadDemo, isLoading = false }: Props) {
 
   /* API Key – localStorage 자동 로드 */
   useEffect(() => {
-    const saved = localStorage.getItem('pharmadd_api_key') ?? '';
+    const saved = localStorage.getItem('pharmadd_gemini_api_key') ?? '';
     setApiKey(saved);
   }, []);
 
   function saveApiKey(key: string) {
     setApiKey(key);
-    if (key) localStorage.setItem('pharmadd_api_key', key);
-    else     localStorage.removeItem('pharmadd_api_key');
+    if (key) localStorage.setItem('pharmadd_gemini_api_key', key);
+    else     localStorage.removeItem('pharmadd_gemini_api_key');
   }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!query.trim()) { setError('성분명 또는 제품명을 입력하세요.'); return; }
-    if (!apiKey.trim()) { setError('OpenAI API Key가 필요합니다. 아래 설정에서 입력하세요.'); setShowSettings(true); return; }
+    if (!apiKey.trim()) { setError('Gemini API Key가 필요합니다. 아래 설정에서 입력하세요.'); setShowSettings(true); return; }
     setError('');
     onSearch(query.trim(), devType, apiKey.trim());
   }
@@ -171,14 +171,14 @@ export function SearchForm({ onSearch, onLoadDemo, isLoading = false }: Props) {
               }`}
             >
               <Settings className="w-3.5 h-3.5" />
-              {apiKey ? '✓ API Key 저장됨' : '⚠ OpenAI API Key 설정 필요'}
+              {apiKey ? '✓ Gemini API Key 저장됨' : '⚠ Gemini API Key 설정 필요'}
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSettings ? 'rotate-180' : ''}`} />
             </button>
 
             {showSettings && (
               <div className="mt-3 p-4 bg-white/5 rounded-xl border border-white/10">
                 <label className="block text-xs font-semibold text-white/60 uppercase tracking-widest mb-2">
-                  OpenAI API Key
+                  Gemini API Key
                 </label>
                 <div className="relative">
                   <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
@@ -187,7 +187,7 @@ export function SearchForm({ onSearch, onLoadDemo, isLoading = false }: Props) {
                     className="w-full bg-white/10 border border-white/20 rounded-lg pl-9 pr-10 py-2.5
                                text-white text-sm font-mono placeholder:text-white/30
                                focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="sk-proj-…"
+                    placeholder="AIza…"
                     value={apiKey}
                     onChange={e => saveApiKey(e.target.value)}
                   />
@@ -204,15 +204,15 @@ export function SearchForm({ onSearch, onLoadDemo, isLoading = false }: Props) {
                     · Key는 브라우저 localStorage에만 저장되며 외부로 전송되지 않습니다.
                   </p>
                   <p className="text-xs text-white/30">
-                    · GPT-4o 사용 (보고서당 약 $0.10–0.30 비용 예상)
+                    · Gemini 2.5 Flash 사용 (보고서당 약 $0.01–0.05 비용 예상)
                   </p>
                   <a
-                    href="https://platform.openai.com/api-keys"
+                    href="https://aistudio.google.com/apikey"
                     target="_blank"
                     rel="noreferrer"
                     className="text-xs text-blue-400 hover:text-blue-300 underline"
                   >
-                    API Key 발급하기 →
+                    Google AI Studio에서 API Key 발급하기 →
                   </a>
                 </div>
               </div>

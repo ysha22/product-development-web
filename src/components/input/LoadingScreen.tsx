@@ -168,7 +168,7 @@ export function LoadingScreen({ progress, drugName }: Props) {
         </div>
 
         <p className="text-center text-xs text-white/20 mt-4">
-          GPT-4o 기반 분석 · 약 30–60초 소요 · 5개 데이터 청크 순차 처리
+          Gemini AI 기반 분석 · 약 30–60초 소요 · 5개 데이터 청크 순차 처리
         </p>
       </div>
     </div>

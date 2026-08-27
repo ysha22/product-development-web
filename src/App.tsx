@@ -173,7 +173,7 @@ export default function App() {
           onNewReport={handleNewReport}
         />
 
-        <main className="px-6 py-6 max-w-5xl mx-auto space-y-10">
+        <main id="report-content" className="px-6 py-6 max-w-5xl mx-auto space-y-10">
           <ExecutiveSummary report={report} />
           <hr className="border-gray-200" />
           <Part1Overview report={report} />

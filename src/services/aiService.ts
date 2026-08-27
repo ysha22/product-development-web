@@ -1,12 +1,14 @@
 /**
- * AI Service – OpenAI GPT-4o 기반 의약품 DD 보고서 자동 생성
+ * AI Service – Google Gemini 기반 의약품 DD 보고서 자동 생성
  *
  * 전략:
  * - 보고서를 5개 청크로 나눠 순차 호출 (토큰 한도 대응)
  * - 각 청크는 독립적인 JSON Schema를 가짐
  * - 모든 응답은 ReportData 타입으로 병합
+ * - 모델 폴백: gemini-3.6-flash → gemini-3.5-flash-lite
  */
 
+import { GoogleGenAI } from '@google/genai';
 import type {
   ReportData,
   Part1Overview,
@@ -354,40 +356,44 @@ Return JSON for FINANCIAL MODEL and CONCLUSION:
 }`;
 }
 
-/* ── OpenAI API 호출 ── */
-async function callOpenAI(
+/* ── Gemini API 호출 (자동 폴백) ── */
+const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash-lite'];
+
+async function callGemini(
   apiKey: string,
   userPrompt: string,
-  model = 'gpt-4o',
 ): Promise<string> {
-  const res = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user',   content: userPrompt },
-      ],
-      temperature: 0.2,
-      max_tokens: 4096,
-      response_format: { type: 'json_object' },
-    }),
-  });
+  const ai = new GoogleGenAI({ apiKey });
+  let lastError: Error = new Error('알 수 없는 오류');
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({})) as Record<string, unknown>;
-    const msg = (err?.error as Record<string,string>)?.message ?? `HTTP ${res.status}`;
-    throw new Error(`OpenAI API 오류: ${msg}`);
+  for (const model of GEMINI_MODELS) {
+    try {
+      const response = await ai.models.generateContent({
+        model,
+        contents: `${SYSTEM_PROMPT}\n\n${userPrompt}`,
+        config: {
+          temperature: 0.2,
+          maxOutputTokens: 8192,
+          responseMimeType: 'application/json',
+        },
+      });
+
+      const text = response.text;
+      if (!text) throw new Error('Gemini API 응답이 비어있습니다.');
+      return text;
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+      const msg = lastError.message;
+      // 503(과부하) 또는 404(모델 없음)일 때만 다음 모델로 폴백
+      const shouldFallback = msg.includes('503') || msg.includes('UNAVAILABLE')
+        || msg.includes('404') || msg.includes('NOT_FOUND')
+        || msg.includes('no longer available');
+      if (!shouldFallback) throw lastError; // 인증 오류 등은 즉시 throw
+      // 다음 모델 시도
+    }
   }
 
-  const data = await res.json() as {
-    choices: { message: { content: string } }[];
-  };
-  return data.choices[0].message.content;
+  throw lastError;
 }
 
 function safeParseJSON(raw: string): Record<string, unknown> {
@@ -463,7 +469,7 @@ export async function fetchDrugReport(
   await delay(300);
   onProgress({ step: 'product_info', ...STEPS.product_info, detail: '제품명·성분명·허가현황 분석' });
 
-  const raw1 = await callOpenAI(apiKey, chunk1Prompt(query, devType));
+  const raw1 = await callGemini(apiKey, chunk1Prompt(query, devType));
   const d1 = safeParseJSON(raw1) as Record<string, unknown>;
 
   // Merge product info (Part2 = ProductInfo)
@@ -489,14 +495,14 @@ export async function fetchDrugReport(
 
   /* ── Step 2: Clinical + Academic ── */
   onProgress({ step: 'clinical', ...STEPS.clinical, detail: '임상시험 · 학술논문 · 진료지침' });
-  const raw2 = await callOpenAI(apiKey, chunk2Prompt(query, report.input.innName));
+  const raw2 = await callGemini(apiKey, chunk2Prompt(query, report.input.innName));
   const d2 = safeParseJSON(raw2) as Record<string, unknown>;
   if (d2.part3) report.part3 = { ...report.part3, ...(d2.part3 as Partial<Part3Academic>) };
   if (d2.part4) report.part4 = { ...report.part4, ...(d2.part4 as Partial<Part4Clinical>) };
 
   /* ── Step 3: Market + Patent ── */
   onProgress({ step: 'market_patent', ...STEPS.market_patent, detail: '시장규모 · 경쟁제품 · 특허포트폴리오' });
-  const raw3 = await callOpenAI(apiKey, chunk3Prompt(query, report.input.innName));
+  const raw3 = await callGemini(apiKey, chunk3Prompt(query, report.input.innName));
   const d3 = safeParseJSON(raw3) as Record<string, unknown>;
   if (d3.part5) report.part5 = { ...report.part5, ...(d3.part5 as Partial<Part5Market>) };
   if (d3.part6) {
@@ -506,14 +512,14 @@ export async function fetchDrugReport(
 
   /* ── Step 4: Pricing + Regulatory ── */
   onProgress({ step: 'financial', ...STEPS.financial, detail: '약가 · 허가전략 · 리스크 매트릭스' });
-  const raw4 = await callOpenAI(apiKey, chunk4Prompt(query, report.input.innName, devType));
+  const raw4 = await callGemini(apiKey, chunk4Prompt(query, report.input.innName, devType));
   const d4 = safeParseJSON(raw4) as Record<string, unknown>;
   if (d4.part7) report.part7 = { ...report.part7, ...(d4.part7 as Partial<Part7Pricing>) };
   if (d4.part8) report.part8 = { ...report.part8, ...(d4.part8 as Partial<Part8Regulatory>) };
 
   /* ── Step 5: Financial + Conclusion ── */
   onProgress({ step: 'conclusion', ...STEPS.conclusion, detail: 'NPV · 시나리오 · 개발의사결정' });
-  const raw5 = await callOpenAI(apiKey, chunk5Prompt(query, report.input.innName));
+  const raw5 = await callGemini(apiKey, chunk5Prompt(query, report.input.innName));
   const d5 = safeParseJSON(raw5) as Record<string, unknown>;
 
   if (d5.part9inputs) {

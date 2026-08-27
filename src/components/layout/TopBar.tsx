@@ -11,13 +11,13 @@ interface TopBarProps {
 }
 
 function ApiKeyPanel({ onClose }: { onClose: () => void }) {
-  const [key, setKey] = useState(() => localStorage.getItem('pharmadd_api_key') ?? '');
+  const [key, setKey] = useState(() => localStorage.getItem('pharmadd_gemini_api_key') ?? '');
   const [show, setShow] = useState(false);
   const [saved, setSaved] = useState(false);
 
   function save() {
-    if (key.trim()) localStorage.setItem('pharmadd_api_key', key.trim());
-    else            localStorage.removeItem('pharmadd_api_key');
+    if (key.trim()) localStorage.setItem('pharmadd_gemini_api_key', key.trim());
+    else            localStorage.removeItem('pharmadd_gemini_api_key');
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -27,7 +27,7 @@ function ApiKeyPanel({ onClose }: { onClose: () => void }) {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Key className="w-4 h-4 text-gray-500" />
-          <span className="text-sm font-semibold text-gray-900">OpenAI API Key</span>
+          <span className="text-sm font-semibold text-gray-900">Gemini API Key</span>
         </div>
         <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
           <X className="w-4 h-4" />
@@ -39,7 +39,7 @@ function ApiKeyPanel({ onClose }: { onClose: () => void }) {
           type={show ? 'text' : 'password'}
           className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-9 text-sm font-mono
                      focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-          placeholder="sk-proj-…"
+          placeholder="AIza…"
           value={key}
           onChange={e => { setKey(e.target.value); setSaved(false); }}
         />
@@ -65,10 +65,10 @@ function ApiKeyPanel({ onClose }: { onClose: () => void }) {
 
       <div className="mt-2 space-y-1">
         <p className="text-xs text-gray-400">· 브라우저 localStorage에만 저장됩니다.</p>
-        <p className="text-xs text-gray-400">· GPT-4o 사용 · 보고서당 약 $0.10–0.30</p>
-        <a href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer"
+        <p className="text-xs text-gray-400">· Gemini 3.6 Flash 사용 · 무료 quota 제공</p>
+        <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer"
            className="text-xs text-blue-500 hover:text-blue-700 underline">
-          API Key 발급하기 →
+          Google AI Studio에서 API Key 발급하기 →
         </a>
       </div>
     </div>
@@ -77,7 +77,7 @@ function ApiKeyPanel({ onClose }: { onClose: () => void }) {
 
 export function TopBar({ productName, isDemoData, createdAt, onExportPDF, onExportExcel, onNewReport }: TopBarProps) {
   const [showApiPanel, setShowApiPanel] = useState(false);
-  const hasKey = !!localStorage.getItem('pharmadd_api_key');
+  const hasKey = !!localStorage.getItem('pharmadd_gemini_api_key');
 
   return (
     <header className="sticky top-0 z-20 bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between gap-4 no-print">
