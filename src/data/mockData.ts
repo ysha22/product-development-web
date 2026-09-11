@@ -688,4 +688,49 @@ export const DEMO_REPORT: ReportData = {
     pricing: 'MODERATE',
     financial: 'LOW',
   },
+
+  // ============================================================
+  // PART 11 – REFERENCES (DEMO)
+  // ============================================================
+  part11: {
+    references: [
+      {
+        id: 1,
+        category: 'regulatory',
+        title: 'Tagrisso® 처방 정보 (Prescribing Information)',
+        authors: 'U.S. Food and Drug Administration (FDA)',
+        source: 'FDA 공식 문서',
+        year: '2015',
+        url: 'https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/208065s000lbl.pdf',
+      },
+      {
+        id: 2,
+        category: 'clinical',
+        title: 'FLAURA: 미치료 EGFR 변이 진행성 비소세포폐암에서 오시머티닙의 효능 (Osimertinib in Untreated EGFR-Mutated Advanced NSCLC)',
+        authors: 'Soria JC, Ohe Y, Vansteenkiste J, et al.',
+        source: 'New England Journal of Medicine (NEJM)',
+        year: '2018',
+        url: 'https://www.nejm.org/doi/full/10.1056/NEJMoa1810483',
+        doi: '10.1056/NEJMoa1810483',
+      },
+      {
+        id: 3,
+        category: 'guideline',
+        title: 'NCCN 임상 실무 가이드라인: 비소세포폐암 v2.2026 (NCCN Clinical Practice Guidelines: Non-Small Cell Lung Cancer v2.2026)',
+        authors: 'National Comprehensive Cancer Network (NCCN)',
+        source: 'NCCN Guidelines',
+        year: '2026',
+        url: 'https://www.nccn.org/guidelines/guidelines-detail?category=1&id=1450',
+      },
+      {
+        id: 4,
+        category: 'regulatory',
+        title: '요양급여 적용기준 (2026년)',
+        authors: '건강보험심사평가원 (HIRA)',
+        source: '건강보험심사평가원',
+        year: '2026',
+        url: 'https://www.hira.or.kr',
+      },
+    ],
+  },
 };

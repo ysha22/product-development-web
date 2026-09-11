@@ -1,4 +1,4 @@
-import { Activity, BarChart2, BookOpen, Building2, ChevronRight, DollarSign, FileText, FlaskConical, Home, LayoutDashboard, Scale, Shield, TrendingUp } from 'lucide-react';
+import { Activity, BarChart2, BookOpen, BookMarked, Building2, ChevronRight, DollarSign, FileText, FlaskConical, Home, LayoutDashboard, Scale, Shield, TrendingUp } from 'lucide-react';
 
 export const NAV_SECTIONS = [
   { id: 'executive',   label: 'Executive Summary',         icon: LayoutDashboard },
@@ -12,6 +12,7 @@ export const NAV_SECTIONS = [
   { id: 'part8',       label: '8. 허가전략',                  icon: Building2 },
   { id: 'part9',       label: '9. S/F 및 5-Year NPV',       icon: BarChart2 },
   { id: 'part10',      label: '10. 결론 / 개발의사결정',        icon: Scale },
+  { id: 'part11',      label: '11. 참고문헌',                  icon: BookMarked },
 ] as const;
 
 export type SectionId = typeof NAV_SECTIONS[number]['id'];

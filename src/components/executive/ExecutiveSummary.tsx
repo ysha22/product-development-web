@@ -58,7 +58,7 @@ export function ExecutiveSummary({ report }: Props) {
           </div>
           <p className="text-sm text-gray-500">
             {report.input.productName} &nbsp;·&nbsp; {report.input.innName}
-            &nbsp;·&nbsp; {report.input.indication}
+            &nbsp;·&nbsp; {report.part1?.targetProductProfile?.indication || report.input.indication}
           </p>
         </div>
         <p className="text-xs text-gray-400 flex-shrink-0">As of {report.createdAt}</p>

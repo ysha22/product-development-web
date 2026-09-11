@@ -233,6 +233,7 @@ export interface ClinicalTrial {
   doi?: string;
   pubmedUrl?: string;
   sourceId: string;
+  refIds?: number[];            // Part11 레퍼런스 번호 목록 e.g. [1, 2]
 }
 
 export interface CompetitorClinical {
@@ -309,6 +310,7 @@ export interface Patent {
   keyClaims: string[];
   riskLevel: RiskLevel;
   riskNote: string;
+  refIds?: number[];            // Part11 레퍼런스 번호 목록
 }
 
 export interface FTOAnalysis {
@@ -485,6 +487,36 @@ export interface Part10Conclusion {
 }
 
 // ============================================================
+// PART 11 – REFERENCES
+// ============================================================
+
+export type ReferenceCategory =
+  | 'clinical'
+  | 'regulatory'
+  | 'patent'
+  | 'market'
+  | 'guideline'
+  | 'academic'
+  | 'financial'
+  | 'other';
+
+export interface Reference {
+  id: number;                   // [1], [2], ...
+  category: ReferenceCategory;
+  title: string;                // 논문/문서 제목 (한글 우선, 없으면 영문)
+  authors?: string;             // 저자 또는 기관명
+  source: string;               // 저널명 / 가이드라인 / 특허청 등
+  year?: string;                // 발행연도
+  url?: string;                 // PubMed, USPTO, KIPRIS 등 링크
+  doi?: string;
+  note?: string;                // 보충 설명
+}
+
+export interface Part11References {
+  references: Reference[];
+}
+
+// ============================================================
 // RISK PANEL (always visible, right sidebar)
 // ============================================================
 
@@ -521,6 +553,7 @@ export interface ReportData {
   part8: Part8Regulatory;
   part9: Part9Financial;
   part10: Part10Conclusion;
+  part11: Part11References;
 
   // Always-visible panels
   riskPanel: RiskPanel;

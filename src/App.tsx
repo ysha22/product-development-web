@@ -22,6 +22,7 @@ import { Part7Pricing } from './components/parts/Part7Pricing';
 import { Part8Regulatory } from './components/parts/Part8Regulatory';
 import { Part9Financial } from './components/parts/Part9Financial';
 import { Part10Conclusion } from './components/parts/Part10Conclusion';
+import { Part11References } from './components/parts/Part11References';
 import { exportPDF, exportExcel } from './utils/exportUtils';
 
 /* ── App state machine ── */
@@ -46,7 +47,7 @@ export default function App() {
   const handleScroll = useCallback(() => {
     const sections = [
       'executive','part1','part2','part3','part4','part5',
-      'part6','part7','part8','part9','part10',
+      'part6','part7','part8','part9','part10','part11',
     ] as SectionId[];
     for (const id of [...sections].reverse()) {
       const rect = document.getElementById(id)?.getBoundingClientRect();
@@ -195,6 +196,8 @@ export default function App() {
           <Part9Financial report={report} onInputChange={handleFinancialInputChange} />
           <hr className="border-gray-200" />
           <Part10Conclusion report={report} />
+          <hr className="border-gray-200" />
+          <Part11References report={report} />
           <div className="h-16" />
         </main>
       </div>

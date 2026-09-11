@@ -19,6 +19,7 @@ import type {
   Part7Pricing,
   Part8Regulatory,
   Part10Conclusion,
+  Part11References,
   RiskPanel,
 } from '../types';
 import { DEMO_REPORT } from '../data/mockData';
@@ -196,7 +197,8 @@ Return JSON for ACADEMIC INFO and CLINICAL DATA:
         "reference": string (full citation),
         "doi": string|null,
         "pubmedUrl": string|null,
-        "sourceId": "src002"
+        "sourceId": "src002",
+        "refIds": [number] (Part11 레퍼런스 번호 목록. 이 임상시험에 해당하는 Part11 references의 id값을 배열로)
       }
     ],
     "competitorComparison": [
@@ -244,7 +246,8 @@ Return JSON for MARKET DATA and PATENT INFO:
         "status": "granted|pending|expired|abandoned",
         "keyClaims": [string],
         "riskLevel": "LOW|MODERATE|HIGH|CRITICAL",
-        "riskNote": string
+        "riskNote": string,
+        "refIds": [number] (Part11 레퍼런스 번호 목록. 이 특허에 해당하는 Part11 references의 id값을 배열로)
       }
     ],
     "ftoAnalysis": {
@@ -352,6 +355,21 @@ Return JSON for FINANCIAL MODEL and CONCLUSION:
     "market": "LOW|MODERATE|HIGH|CRITICAL",
     "pricing": "LOW|MODERATE|HIGH|CRITICAL",
     "financial": "LOW|MODERATE|HIGH|CRITICAL"
+  },
+  "part11": {
+    "references": [
+      {
+        "id": number (1부터 순번),
+        "category": "clinical|regulatory|patent|market|guideline|academic|financial|other",
+        "title": string (한글 제목 우선. 글로벌 문헌은 한글 번역 제목을 먼저 쓰고, 필요하면 괄호 안에 원제 영문 병기. 국내 문헌은 한글만),
+        "authors": string (저자명 또는 기관명),
+        "source": string (저널명 / 가이드라인 발행기관 / 특허청 등),
+        "year": string (발행연도 "YYYY"),
+        "url": string|null (PubMed, USPTO, KIPRIS, FDA, MFDS, HIRA 등 원문 링크),
+        "doi": string|null,
+        "note": string|null (보충 설명 필요 시)
+      }
+    ]
   }
 }`;
 }
@@ -547,6 +565,9 @@ export async function fetchDrugReport(
   }
   if (d5.riskPanel) {
     report.riskPanel = { ...report.riskPanel, ...(d5.riskPanel as Partial<RiskPanel>) };
+  }
+  if (d5.part11) {
+    report.part11 = { ...report.part11, ...(d5.part11 as Partial<Part11References>) };
   }
 
   onProgress({ step: 'done', ...STEPS.done });
