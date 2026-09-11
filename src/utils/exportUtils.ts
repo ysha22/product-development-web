@@ -27,7 +27,6 @@ export async function exportPDF() {
       windowWidth: 1280,
     });
 
-    const imgData  = canvas.toDataURL('image/png');
     const pdf      = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
 
     const pageW    = pdf.internal.pageSize.getWidth();   // 210 mm
