@@ -1,7 +1,11 @@
 import { useState, useRef, useCallback } from 'react';
 import type { ReportData, NPVInputs, DevelopmentType } from './types';
+import { calculateFinancial } from './utils/financial';
+import type { AISettings } from './services/providers';
+import { readLibrary, writeLibrary, upsertReport, downloadReport } from './services/reportStorage';
+import { redactApiError } from './services/apiErrors';
 import { DEMO_REPORT } from './data/mockData';
-import { fetchDrugReport, type ProgressState } from './services/aiService';
+import { fetchDrugReport, type ProgressState, type ReportCheckpoint } from './services/aiService';
 
 import { Sidebar, type SectionId } from './components/layout/Sidebar';
 import { RiskPanel } from './components/layout/RiskPanel';
@@ -28,15 +32,40 @@ import { exportPDF, exportExcel } from './utils/exportUtils';
 /* ── App state machine ── */
 type AppState =
   | { screen: 'search' }
-  | { screen: 'loading';  query: string; devType: DevelopmentType; apiKey: string }
-  | { screen: 'error';    error: string; query: string; devType: DevelopmentType; apiKey: string; partial?: ReportData }
+  | { screen: 'loading';  query: string; devType: DevelopmentType; settings: AISettings }
+  | { screen: 'error';    error: string; query: string; devType: DevelopmentType; settings: AISettings; completed: number }
   | { screen: 'report';   report: ReportData };
 
 export default function App() {
   const [state, setState] = useState<AppState>({ screen: 'search' });
   const [progress, setProgress] = useState<ProgressState>({ step: 'searching', label: '시작 중…', percent: 0 });
   const [activeSection, setActiveSection] = useState<SectionId>('executive');
+  const checkpoint = useRef<ReportCheckpoint | undefined>(undefined);
+  const inFlight = useRef(false);
+  const [library, setLibrary] = useState(readLibrary);
+  const libraryRef = useRef(library.entries);
+  const [notice, setNotice] = useState('');
   const mainRef = useRef<HTMLDivElement>(null);
+
+  function storeReport(report: ReportData, query?: string) {
+    const entries = upsertReport(libraryRef.current, report, query);
+    libraryRef.current = entries;
+    const warning = writeLibrary(entries);
+    setLibrary({ entries, warning });
+    setNotice(warning || '이 브라우저의 보관함에 저장되었습니다. 백업은 JSON으로 저장하세요.');
+  }
+
+  function openReport(report: ReportData) {
+    storeReport(report);
+    setState({ screen:'report', report:structuredClone(report) });
+    setActiveSection('executive');
+  }
+
+  function saveReportFile() {
+    if (state.screen !== 'report') return;
+    try { storeReport(state.report); downloadReport(state.report); }
+    catch { setNotice('보고서 파일을 저장하지 못했습니다. 다시 시도하세요.'); }
+  }
 
   /* ── Navigation ── */
   const handleNavigate = useCallback((id: SectionId) => {
@@ -56,49 +85,56 @@ export default function App() {
   }, []);
 
   /* ── Search → fetch ── */
-  async function handleSearch(query: string, devType: DevelopmentType, apiKey: string) {
-    setState({ screen: 'loading', query, devType, apiKey });
+  async function handleSearch(query: string, devType: DevelopmentType, settings: AISettings) {
+    if (inFlight.current) return;
+    inFlight.current = true;
+    setNotice('');
+    if (!checkpoint.current || checkpoint.current.query !== query || checkpoint.current.devType !== devType) {
+      checkpoint.current = { query, devType, chunks: [] };
+    }
+    setState({ screen: 'loading', query, devType, settings });
     setProgress({ step: 'searching', label: '분석 시작 중…', percent: 0 });
 
-    let partialReport: ReportData | undefined;
+
 
     try {
       const report = await fetchDrugReport(
         query,
         devType,
-        apiKey,
-        (p) => {
-          setProgress(p);
-          // keep last partially built report in case of later error
-          // (fetchDrugReport mutates and returns the full object at end,
-          //  but we can capture progress updates)
-        },
+        settings.apiKey,
+        setProgress,
+        checkpoint.current,
+        settings,
       );
+      checkpoint.current = undefined;
+      storeReport(report, query);
       setState({ screen: 'report', report });
       setActiveSection('executive');
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setState({
         screen: 'error',
-        error: msg,
+        error: redactApiError(msg, settings.apiKey),
         query,
         devType,
-        apiKey,
-        partial: partialReport,
+        settings,
+        completed: checkpoint.current?.chunks.length ?? 0,
       });
+    } finally {
+      inFlight.current = false;
     }
   }
 
   /* ── Demo ── */
   function handleLoadDemo() {
-    setState({ screen: 'report', report: DEMO_REPORT });
+    setState({ screen: 'report', report: { ...structuredClone(DEMO_REPORT), part9: calculateFinancial(DEMO_REPORT.part9.inputs, Number(DEMO_REPORT.createdAt.slice(0,4))) } });
     setActiveSection('executive');
   }
 
   /* ── Retry ── */
   function handleRetry() {
     if (state.screen !== 'error') return;
-    handleSearch(state.query, state.devType, state.apiKey);
+    handleSearch(state.query, state.devType, state.settings);
   }
 
   /* ── Back to search ── */
@@ -109,10 +145,13 @@ export default function App() {
   /* ── NPV inputs update ── */
   function handleFinancialInputChange(inputs: NPVInputs) {
     if (state.screen !== 'report') return;
-    setState(prev => prev.screen === 'report' ? {
-      ...prev,
-      report: { ...prev.report, part9: { ...prev.report.part9, inputs } },
-    } : prev);
+    const financial = calculateFinancial(inputs, Number(state.report.createdAt.slice(0,4)));
+    const report = { ...state.report,
+      updatedAt: new Date().toISOString().slice(0,10),
+      input: { ...state.report.input, expectedLaunchYear: financial.inputs.launchYear },
+      part6: { ...state.report.part6, expectedLaunchYear: financial.inputs.launchYear }, part9: financial };
+    storeReport(report);
+    setState({screen:'report',report});
   }
 
   /* ── Screens ── */
@@ -122,6 +161,9 @@ export default function App() {
       <SearchForm
         onSearch={handleSearch}
         onLoadDemo={handleLoadDemo}
+        entries={library.entries}
+        notice={library.warning}
+        onOpen={openReport}
       />
     );
   }
@@ -131,6 +173,8 @@ export default function App() {
       <LoadingScreen
         progress={progress}
         drugName={state.query}
+        provider={state.settings.provider}
+        model={state.settings.model}
       />
     );
   }
@@ -143,11 +187,8 @@ export default function App() {
         onRetry={handleRetry}
         onLoadDemo={handleLoadDemo}
         onBack={handleNewReport}
-        partialReport={!!state.partial}
-        onUsePartial={state.partial
-          ? () => setState({ screen: 'report', report: state.partial! })
-          : undefined
-        }
+        completed={state.completed}
+        provider={state.settings.provider}
       />
     );
   }
@@ -172,9 +213,15 @@ export default function App() {
           onExportPDF={exportPDF}
           onExportExcel={() => exportExcel(report)}
           onNewReport={handleNewReport}
+          onSaveReport={saveReportFile}
         />
 
         <main id="report-content" className="px-6 py-6 max-w-5xl mx-auto space-y-10">
+          {notice && <p role="status" className="rounded-lg bg-blue-50 p-3 text-sm text-blue-800">{notice}</p>}
+          <div className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+            {report.isDemoData ? '데모 예시입니다.' : 'AI 생성 초안입니다. 원문 조회 및 출처 검증을 수행하지 않았습니다.'}
+            {' '}재무 입력 변경은 NPV·차트·Excel에 반영되며, AI 결론 문구와 약가 시나리오는 자동으로 다시 작성되지 않습니다.
+          </div>
           <ExecutiveSummary report={report} />
           <hr className="border-gray-200" />
           <Part1Overview report={report} />

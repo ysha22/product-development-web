@@ -79,7 +79,7 @@ export function Part7Pricing({ report }: Props) {
       </SectionCard>
 
       {/* Competitor Prices */}
-      <SectionCard title="경쟁제품 약가 비교" badge={<EvidenceBadge level="A" />} noPad>
+      <SectionCard title="경쟁제품 약가 비교" badge={<EvidenceBadge level={report.isDemoData ? "A" : "F"} />} noPad>
         <table className="table-professional">
           <thead><tr><th>제품명</th><th className="text-right">약가</th></tr></thead>
           <tbody>

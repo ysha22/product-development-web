@@ -56,7 +56,7 @@ export function Part2Product({ report }: Props) {
       <SectionCard
         title="제품 기본정보"
         subtitle="허가 관련 일자는 실제 날짜를 기준으로 표시"
-        badge={<EvidenceBadge level="A" />}
+        badge={<EvidenceBadge level={report.isDemoData ? "A" : "F"} />}
         noPad
       >
         <table className="table-professional">

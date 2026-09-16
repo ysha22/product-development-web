@@ -74,7 +74,6 @@ export const DEMO_REPORT: ReportData = {
       organization: 'GlobalData Pharma',
       documentName: 'EGFR NSCLC Market Forecast 2026–2032',
       publishedDate: '2026-04-01',
-      url: '#',
       accessDate: '2026-08-01',
       evidenceLevel: 'E',
     },

@@ -1,5 +1,7 @@
 import { AlertTriangle, RefreshCw, FlaskConical, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
+import { PROVIDERS, type AIProvider } from '../../services/providers';
+import { describeApiError } from '../../services/apiErrors';
 
 interface Props {
   error: string;
@@ -7,27 +9,14 @@ interface Props {
   onRetry: () => void;
   onLoadDemo: () => void;
   onBack: () => void;
-  partialReport?: boolean;   // true if partial data was loaded
-  onUsePartial?: () => void;
+  completed: number;
+  provider?: AIProvider;
 }
 
-const ERROR_HELPS: { pattern: RegExp; help: string }[] = [
-  { pattern: /401|Unauthorized|invalid.*key/i,
-    help: 'API Key가 올바르지 않습니다. 설정에서 OpenAI API Key를 다시 확인하세요.' },
-  { pattern: /429|rate.*limit|quota/i,
-    help: 'API 호출 한도에 도달했습니다. 잠시 후 다시 시도하거나 사용 플랜을 확인하세요.' },
-  { pattern: /503|502|500|server/i,
-    help: 'OpenAI 서버에 일시적인 문제가 있습니다. 1-2분 후 재시도하세요.' },
-  { pattern: /network|fetch|CORS|Failed to fetch/i,
-    help: '네트워크 연결을 확인하세요. VPN 또는 방화벽이 API 요청을 차단할 수 있습니다.' },
-  { pattern: /parse|JSON/i,
-    help: 'AI 응답 형식 오류입니다. 재시도하면 대부분 해결됩니다.' },
-];
-
-export function ErrorScreen({ error, drugName, onRetry, onLoadDemo, onBack, partialReport, onUsePartial }: Props) {
+export function ErrorScreen({ error, drugName, onRetry, onLoadDemo, onBack, completed, provider = 'gemini' }: Props) {
   const [showDetail, setShowDetail] = useState(false);
 
-  const helpMsg = ERROR_HELPS.find(h => h.pattern.test(error))?.help;
+  const helpMsg = describeApiError(error, provider);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-[#0a0f2e] to-blue-950 flex items-center justify-center p-6">
@@ -65,6 +54,8 @@ export function ErrorScreen({ error, drugName, onRetry, onLoadDemo, onBack, part
             </div>
           )}
 
+          <p className="text-xs text-white/50 mb-4">완료된 단계는 이 화면을 사용하는 동안 유지됩니다. 새로고침하거나 창을 닫으면 사라집니다.</p>
+          <a href={PROVIDERS[provider].usageUrl} target="_blank" rel="noreferrer" className="block text-sm text-blue-300 underline mb-4">{PROVIDERS[provider].label} 사용량 및 한도 확인</a>
           {/* Actions */}
           <div className="space-y-2.5">
             <button
@@ -73,20 +64,9 @@ export function ErrorScreen({ error, drugName, onRetry, onLoadDemo, onBack, part
                          bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm transition-all"
             >
               <RefreshCw className="w-4 h-4" />
-              다시 시도
+              {completed > 0 ? `이어서 시도 (${completed}/5단계 완료)` : '다시 시도'}
             </button>
 
-            {partialReport && onUsePartial && (
-              <button
-                onClick={onUsePartial}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl
-                           bg-amber-600/20 hover:bg-amber-600/30 border border-amber-500/30
-                           text-amber-300 font-medium text-sm transition-all"
-              >
-                부분 생성된 보고서 보기
-                <span className="text-xs text-amber-400/60">(불완전할 수 있음)</span>
-              </button>
-            )}
 
             <button
               onClick={onLoadDemo}

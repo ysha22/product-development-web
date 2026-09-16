@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Activity, CheckCircle, Loader2 } from 'lucide-react';
+import { PROVIDERS, type AIProvider } from '../../services/providers';
 import type { ProgressState, ProgressStep } from '../../services/aiService';
 
 const STEP_ORDER: ProgressStep[] = [
@@ -18,23 +19,21 @@ const STEP_META: Record<ProgressStep, { icon: string; color: string }> = {
 };
 
 const ANALYSIS_TIPS = [
-  'FDA · EMA · MFDS 허가 데이터베이스 참조 중…',
-  'PubMed 임상논문 검색 및 분석 중…',
-  'ClinicalTrials.gov 임상시험 데이터 수집 중…',
-  'NCCN · ESMO · ASCO 진료지침 확인 중…',
-  'KIPRIS · USPTO · EPO 특허 포트폴리오 분석 중…',
-  '시장조사 데이터 및 경쟁 현황 분석 중…',
-  'HIRA · NHIS 약가 및 급여 정보 확인 중…',
-  '5-Year NPV 및 리스크 모델 계산 중…',
-  '개발의사결정 프레임워크 적용 중…',
+  '제품 개요와 허가정보 초안을 작성 중입니다.',
+  '임상·학술정보 초안을 작성 중입니다. 원문 검증은 별도로 필요합니다.',
+  '시장·특허 분석 초안을 작성 중입니다.',
+  '약가·허가전략 초안을 작성 중입니다.',
+  '재무 가정과 개발의사결정 초안을 작성 중입니다.',
 ];
 
 interface Props {
   progress: ProgressState;
   drugName: string;
+  provider?: AIProvider;
+  model?: string;
 }
 
-export function LoadingScreen({ progress, drugName }: Props) {
+export function LoadingScreen({ progress, drugName, provider = 'gemini', model }: Props) {
   const [tipIndex, setTipIndex] = useState(0);
   const [dots, setDots] = useState('');
 
@@ -168,7 +167,7 @@ export function LoadingScreen({ progress, drugName }: Props) {
         </div>
 
         <p className="text-center text-xs text-white/20 mt-4">
-          Gemini AI 기반 분석 · 약 30–60초 소요 · 5개 데이터 청크 순차 처리
+          {PROVIDERS[provider].label} · {model} · 5단계 순차 생성
         </p>
       </div>
     </div>

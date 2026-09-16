@@ -81,7 +81,7 @@ export function Part5Market({ report }: Props) {
       <SectionCard
         title="글로벌 / 국내 시장 규모 추이"
         subtitle="실선: 실제값 · 점선: 예측값"
-        badge={<EvidenceBadge level="E" />}
+        badge={<EvidenceBadge level={report.isDemoData ? "E" : "F"} />}
       >
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
@@ -114,7 +114,7 @@ export function Part5Market({ report }: Props) {
       </SectionCard>
 
       {/* Patient numbers chart */}
-      <SectionCard title="처방환자수 및 시장점유율 추이" badge={<EvidenceBadge level="E" />}>
+      <SectionCard title="처방환자수 및 시장점유율 추이" badge={<EvidenceBadge level={report.isDemoData ? "E" : "F"} />}>
         <div className="h-56">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={patientData} margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>

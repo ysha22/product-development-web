@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test tests/*.test.cjs",
+    "schema:generate": "node scripts/generate-schema.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.19.0",

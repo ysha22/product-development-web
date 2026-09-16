@@ -9,11 +9,5 @@ export default defineConfig({
     // 단일 HTML 파일 생성을 위해 CSS도 인라인으로 처리
     cssCodeSplit: false,
     assetsInlineLimit: 100_000_000, // 모든 assets를 인라인으로 포함
-    rollupOptions: {
-      output: {
-        // 모든 JS를 하나의 청크로 합치기
-        inlineDynamicImports: true,
-      },
-    },
   },
 })

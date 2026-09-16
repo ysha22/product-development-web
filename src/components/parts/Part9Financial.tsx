@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { ReportData, NPVInputs } from '../../types';
 import { SectionCard } from '../shared/SectionCard';
 import {
@@ -20,11 +19,11 @@ const SCENARIO_COLORS: Record<string, string> = {
 
 export function Part9Financial({ report, onInputChange }: Props) {
   const { part9: p } = report;
-  const [inputs, setInputs] = useState<NPVInputs>(p.inputs);
+  const inputs = p.inputs;
 
   function updateInput<K extends keyof NPVInputs>(key: K, value: NPVInputs[K]) {
     const updated = { ...inputs, [key]: value };
-    setInputs(updated);
+
     onInputChange?.(updated);
   }
 
@@ -83,8 +82,9 @@ export function Part9Financial({ report, onInputChange }: Props) {
         ))}
       </div>
 
+      <p className="text-xs text-gray-500">단위: 억원. 개발비 전액은 출시 전년에 반영하고 마케팅비는 출시 후 5년간 50·20·10·10·10%로 배분합니다. 할인 기준은 보고서 작성연도이며, 위험조정 NPV는 NPV × 전체 성공확률의 단순 모델입니다. IRR은 미산출입니다.</p>
       {/* Input Panel */}
-      <SectionCard title="Financial Model Inputs" subtitle="수정하면 결과가 실시간 업데이트됩니다">
+      <SectionCard title="Financial Model Inputs" subtitle="수정하면 결과가 실시간 업데이트됩니다. 총이익률 기준으로 원가율을 계산합니다.">
         <div className="grid grid-cols-4 gap-4">
           {[
             { label: '예상약가 (원/환자/년)', key: 'expectedPrice' as const, step: 100000 },

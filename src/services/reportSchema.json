@@ -1,0 +1,3976 @@
+{
+  "ReportData": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string"
+      },
+      "updatedAt": {
+        "type": "string"
+      },
+      "isDemoData": {
+        "type": "boolean"
+      },
+      "input": {
+        "type": "object",
+        "properties": {
+          "productName": {
+            "type": "string"
+          },
+          "innName": {
+            "type": "string"
+          },
+          "developmentType": {
+            "type": "string",
+            "enum": [
+              "new_drug",
+              "improved_drug",
+              "generic",
+              "biosimilar",
+              "combination",
+              "other"
+            ]
+          },
+          "indication": {
+            "type": "string"
+          },
+          "developmentCountry": {
+            "type": "string"
+          },
+          "targetMarket": {
+            "type": "string"
+          },
+          "expectedLaunchYear": {
+            "type": "number"
+          },
+          "developmentStage": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "preclinical",
+              "phase1",
+              "phase2",
+              "phase3",
+              "nda",
+              "approved",
+              "launched"
+            ]
+          }
+        },
+        "required": [
+          "productName",
+          "innName",
+          "developmentType",
+          "indication",
+          "developmentCountry",
+          "targetMarket",
+          "expectedLaunchYear",
+          "developmentStage"
+        ]
+      },
+      "sources": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "organization": {
+              "type": "string"
+            },
+            "documentName": {
+              "type": "string"
+            },
+            "publishedDate": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "accessDate": {
+              "type": "string"
+            },
+            "evidenceLevel": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "organization",
+            "documentName",
+            "publishedDate",
+            "accessDate",
+            "evidenceLevel"
+          ]
+        }
+      },
+      "part1": {
+        "type": "object",
+        "properties": {
+          "productSummary": {
+            "type": "string"
+          },
+          "developmentBackground": {
+            "type": "string"
+          },
+          "targetDisease": {
+            "type": "string"
+          },
+          "currentTreatmentLimitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "developmentNecessity": {
+            "type": "string"
+          },
+          "developmentObjective": {
+            "type": "string"
+          },
+          "targetProductProfile": {
+            "type": "object",
+            "properties": {
+              "indication": {
+                "type": "string"
+              },
+              "patientPopulation": {
+                "type": "string"
+              },
+              "therapeuticLine": {
+                "type": "string"
+              },
+              "administrationRoute": {
+                "type": "string"
+              },
+              "dosingFrequency": {
+                "type": "string"
+              },
+              "safetyProfile": {
+                "type": "string"
+              },
+              "efficacyTarget": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "indication",
+              "patientPopulation",
+              "therapeuticLine",
+              "administrationRoute",
+              "dosingFrequency",
+              "safetyProfile",
+              "efficacyTarget"
+            ]
+          },
+          "developmentDirection": {
+            "type": "string"
+          },
+          "whyThisProduct": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "productSummary",
+          "developmentBackground",
+          "targetDisease",
+          "currentTreatmentLimitations",
+          "developmentNecessity",
+          "developmentObjective",
+          "targetProductProfile",
+          "developmentDirection",
+          "whyThisProduct"
+        ]
+      },
+      "part2": {
+        "type": "object",
+        "properties": {
+          "innName": {
+            "type": "string"
+          },
+          "brandName": {
+            "type": "string"
+          },
+          "developer": {
+            "type": "string"
+          },
+          "manufacturer": {
+            "type": "string"
+          },
+          "pharmacologicalClass": {
+            "type": "string"
+          },
+          "mechanismOfAction": {
+            "type": "string"
+          },
+          "routeOfAdministration": {
+            "type": "string"
+          },
+          "dosageForm": {
+            "type": "string"
+          },
+          "strength": {
+            "type": "string"
+          },
+          "firstApprovalCountry": {
+            "type": "string"
+          },
+          "firstApprovalDate": {
+            "type": "string"
+          },
+          "koreaApprovalDate": {
+            "type": "string"
+          },
+          "approvedIndications": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dosageAndAdministration": {
+            "type": "string"
+          },
+          "pms": {
+            "type": "string"
+          },
+          "reexaminationPeriod": {
+            "type": "string"
+          },
+          "exclusivity": {
+            "type": "string"
+          },
+          "patents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reimbursementStatus": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "competitors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "innName",
+          "brandName",
+          "developer",
+          "manufacturer",
+          "pharmacologicalClass",
+          "mechanismOfAction",
+          "routeOfAdministration",
+          "dosageForm",
+          "strength",
+          "firstApprovalCountry",
+          "firstApprovalDate",
+          "koreaApprovalDate",
+          "approvedIndications",
+          "dosageAndAdministration",
+          "pms",
+          "reexaminationPeriod",
+          "exclusivity",
+          "patents",
+          "reimbursementStatus",
+          "price",
+          "competitors"
+        ]
+      },
+      "part3": {
+        "type": "object",
+        "properties": {
+          "diseaseOverview": {
+            "type": "object",
+            "properties": {
+              "definition": {
+                "type": "string"
+              },
+              "prevalence": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "actual",
+                      "estimate",
+                      "assumption",
+                      "unavailable",
+                      "user_input"
+                    ]
+                  },
+                  "sourceId": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "status"
+                ]
+              },
+              "incidence": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "actual",
+                      "estimate",
+                      "assumption",
+                      "unavailable",
+                      "user_input"
+                    ]
+                  },
+                  "sourceId": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "status"
+                ]
+              },
+              "patientNumber": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "actual",
+                      "estimate",
+                      "assumption",
+                      "unavailable",
+                      "user_input"
+                    ]
+                  },
+                  "sourceId": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "status"
+                ]
+              },
+              "diseaseBurden": {
+                "type": "string"
+              },
+              "mortalityRate": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "actual",
+                      "estimate",
+                      "assumption",
+                      "unavailable",
+                      "user_input"
+                    ]
+                  },
+                  "sourceId": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "status"
+                ]
+              },
+              "marketSize": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "actual",
+                      "estimate",
+                      "assumption",
+                      "unavailable",
+                      "user_input"
+                    ]
+                  },
+                  "sourceId": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "definition",
+              "prevalence",
+              "incidence",
+              "patientNumber",
+              "diseaseBurden",
+              "mortalityRate",
+              "marketSize"
+            ]
+          },
+          "mechanismOfAction": {
+            "type": "object",
+            "properties": {
+              "summary": {
+                "type": "string"
+              },
+              "pathway": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "target": {
+                "type": "string"
+              },
+              "drugEffect": {
+                "type": "string"
+              },
+              "biologicalEffect": {
+                "type": "string"
+              },
+              "clinicalOutcome": {
+                "type": "string"
+              },
+              "imageUrl": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "summary",
+              "pathway",
+              "target",
+              "drugEffect",
+              "biologicalEffect",
+              "clinicalOutcome"
+            ]
+          },
+          "standardOfCare": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "line": {
+                  "type": "string"
+                },
+                "treatments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "duration": {
+                  "type": "string"
+                },
+                "responseRate": {
+                  "type": "string"
+                },
+                "majorSideEffects": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "limitations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "line",
+                "treatments",
+                "duration",
+                "responseRate",
+                "majorSideEffects",
+                "limitations"
+              ]
+            }
+          },
+          "guidelinePositions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "guideline": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "recommendedLine": {
+                  "type": "string"
+                },
+                "recommendationGrade": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                },
+                "sourceId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "guideline",
+                "version",
+                "recommendedLine",
+                "recommendationGrade",
+                "note",
+                "sourceId"
+              ]
+            }
+          },
+          "therapeuticPositioning": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "efficacy": {
+                  "type": "number"
+                },
+                "unmetNeed": {
+                  "type": "number"
+                },
+                "marketShare": {
+                  "type": "number"
+                },
+                "color": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "efficacy",
+                "unmetNeed",
+                "color"
+              ]
+            }
+          }
+        },
+        "required": [
+          "diseaseOverview",
+          "mechanismOfAction",
+          "standardOfCare",
+          "guidelinePositions",
+          "therapeuticPositioning"
+        ]
+      },
+      "part4": {
+        "type": "object",
+        "properties": {
+          "trials": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "studyName": {
+                  "type": "string"
+                },
+                "clinicalTrialsId": {
+                  "type": "string"
+                },
+                "phase": {
+                  "type": "string"
+                },
+                "design": {
+                  "type": "string"
+                },
+                "randomization": {
+                  "type": "string"
+                },
+                "blinding": {
+                  "type": "string"
+                },
+                "population": {
+                  "type": "string"
+                },
+                "sampleSize": {
+                  "type": "number"
+                },
+                "intervention": {
+                  "type": "string"
+                },
+                "comparator": {
+                  "type": "string"
+                },
+                "primaryEndpoint": {
+                  "type": "string"
+                },
+                "secondaryEndpoints": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "followUp": {
+                  "type": "string"
+                },
+                "endpoints": {
+                  "type": "object",
+                  "properties": {
+                    "pfs": {
+                      "type": "string"
+                    },
+                    "os": {
+                      "type": "string"
+                    },
+                    "orr": {
+                      "type": "string"
+                    },
+                    "dor": {
+                      "type": "string"
+                    },
+                    "hr": {
+                      "type": "string"
+                    },
+                    "ci95": {
+                      "type": "string"
+                    },
+                    "pValue": {
+                      "type": "string"
+                    }
+                  },
+                  "required": []
+                },
+                "safety": {
+                  "type": "object",
+                  "properties": {
+                    "grade3PlusAE": {
+                      "type": "string"
+                    },
+                    "sae": {
+                      "type": "string"
+                    },
+                    "discontinuation": {
+                      "type": "string"
+                    },
+                    "deathRate": {
+                      "type": "string"
+                    },
+                    "majorSafetySignals": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "majorSafetySignals"
+                  ]
+                },
+                "isPivotal": {
+                  "type": "boolean"
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "doi": {
+                  "type": "string"
+                },
+                "pubmedUrl": {
+                  "type": "string"
+                },
+                "sourceId": {
+                  "type": "string"
+                },
+                "refIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "studyName",
+                "phase",
+                "design",
+                "randomization",
+                "blinding",
+                "population",
+                "sampleSize",
+                "intervention",
+                "comparator",
+                "primaryEndpoint",
+                "secondaryEndpoints",
+                "followUp",
+                "endpoints",
+                "safety",
+                "isPivotal",
+                "reference",
+                "sourceId"
+              ]
+            }
+          },
+          "competitorComparison": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "productName": {
+                  "type": "string"
+                },
+                "orr": {
+                  "type": "string"
+                },
+                "medianPfs": {
+                  "type": "string"
+                },
+                "medianOs": {
+                  "type": "string"
+                },
+                "hr": {
+                  "type": "string"
+                },
+                "grade3PlusAE": {
+                  "type": "string"
+                },
+                "discontinuation": {
+                  "type": "string"
+                },
+                "studyName": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "productName",
+                "studyName"
+              ]
+            }
+          },
+          "crossTrialWarning": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "trials",
+          "competitorComparison",
+          "crossTrialWarning"
+        ]
+      },
+      "part5": {
+        "type": "object",
+        "properties": {
+          "yearlyData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "year": {
+                  "type": "number"
+                },
+                "globalMarketSize": {
+                  "type": "number"
+                },
+                "koreaMarketSize": {
+                  "type": "number"
+                },
+                "prescribedPatients": {
+                  "type": "number"
+                },
+                "marketShare": {
+                  "type": "number"
+                },
+                "salesRevenue": {
+                  "type": "number"
+                },
+                "isActual": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "year",
+                "globalMarketSize",
+                "koreaMarketSize",
+                "isActual"
+              ]
+            }
+          },
+          "cagr5Year": {
+            "type": "number"
+          },
+          "globalMarketLatest": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "koreaMarketLatest": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "competitors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "inn": {
+                  "type": "string"
+                },
+                "company": {
+                  "type": "string"
+                },
+                "sales": {
+                  "type": "number"
+                },
+                "marketShare": {
+                  "type": "number"
+                },
+                "patentExpiry": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "efficacyScore": {
+                  "type": "number"
+                },
+                "priceScore": {
+                  "type": "number"
+                },
+                "marketSizeUSD": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "name",
+                "inn",
+                "company"
+              ]
+            }
+          },
+          "treatmentCostAnnual": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "patientGrowthRate": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "majorCountryMarkets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "country": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "string"
+                },
+                "share": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "country",
+                "size",
+                "share"
+              ]
+            }
+          }
+        },
+        "required": [
+          "yearlyData",
+          "cagr5Year",
+          "globalMarketLatest",
+          "koreaMarketLatest",
+          "competitors",
+          "treatmentCostAnnual",
+          "patientGrowthRate",
+          "majorCountryMarkets"
+        ]
+      },
+      "part6": {
+        "type": "object",
+        "properties": {
+          "patents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "patentNo": {
+                  "type": "string"
+                },
+                "applicationNo": {
+                  "type": "string"
+                },
+                "applicant": {
+                  "type": "string"
+                },
+                "priorityDate": {
+                  "type": "string"
+                },
+                "filingDate": {
+                  "type": "string"
+                },
+                "grantDate": {
+                  "type": "string"
+                },
+                "expirationDate": {
+                  "type": "string"
+                },
+                "jurisdiction": {
+                  "type": "string"
+                },
+                "patentType": {
+                  "type": "string",
+                  "enum": [
+                    "combination",
+                    "compound",
+                    "composition",
+                    "formulation",
+                    "polymorph",
+                    "salt",
+                    "method_of_treatment",
+                    "use_patent",
+                    "manufacturing",
+                    "dosage_regimen"
+                  ]
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "granted",
+                    "pending",
+                    "expired",
+                    "abandoned"
+                  ]
+                },
+                "keyClaims": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "riskLevel": {
+                  "type": "string",
+                  "enum": [
+                    "LOW",
+                    "MODERATE",
+                    "HIGH",
+                    "CRITICAL"
+                  ]
+                },
+                "riskNote": {
+                  "type": "string"
+                },
+                "refIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "patentNo",
+                "applicationNo",
+                "applicant",
+                "priorityDate",
+                "filingDate",
+                "grantDate",
+                "expirationDate",
+                "jurisdiction",
+                "patentType",
+                "status",
+                "keyClaims",
+                "riskLevel",
+                "riskNote"
+              ]
+            }
+          },
+          "ftoAnalysis": {
+            "type": "object",
+            "properties": {
+              "coreCompound": {
+                "type": "string",
+                "enum": [
+                  "LOW",
+                  "MODERATE",
+                  "HIGH",
+                  "CRITICAL"
+                ]
+              },
+              "formulation": {
+                "type": "string",
+                "enum": [
+                  "LOW",
+                  "MODERATE",
+                  "HIGH",
+                  "CRITICAL"
+                ]
+              },
+              "usePatent": {
+                "type": "string",
+                "enum": [
+                  "LOW",
+                  "MODERATE",
+                  "HIGH",
+                  "CRITICAL"
+                ]
+              },
+              "combination": {
+                "type": "string",
+                "enum": [
+                  "LOW",
+                  "MODERATE",
+                  "HIGH",
+                  "CRITICAL"
+                ]
+              },
+              "manufacturing": {
+                "type": "string",
+                "enum": [
+                  "LOW",
+                  "MODERATE",
+                  "HIGH",
+                  "CRITICAL"
+                ]
+              },
+              "patentTerm": {
+                "type": "string"
+              },
+              "spcPte": {
+                "type": "string"
+              },
+              "litigationHistory": {
+                "type": "string"
+              },
+              "orangeBookStatus": {
+                "type": "string"
+              },
+              "koreaPatentStatus": {
+                "type": "string"
+              },
+              "overallFTORisk": {
+                "type": "string",
+                "enum": [
+                  "LOW",
+                  "MODERATE",
+                  "HIGH",
+                  "CRITICAL"
+                ]
+              },
+              "disclaimer": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "coreCompound",
+              "formulation",
+              "usePatent",
+              "combination",
+              "manufacturing",
+              "patentTerm",
+              "spcPte",
+              "litigationHistory",
+              "orangeBookStatus",
+              "koreaPatentStatus",
+              "overallFTORisk",
+              "disclaimer"
+            ]
+          },
+          "expectedLaunchYear": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "patents",
+          "ftoAnalysis",
+          "expectedLaunchYear"
+        ]
+      },
+      "part7": {
+        "type": "object",
+        "properties": {
+          "referencePrice": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "sameMoleculePrice": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "sameClassPrice": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "competitorPrices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "price"
+              ]
+            }
+          },
+          "dailyCost": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "monthlyCost": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "annualCost": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "expectedReimbursementPrice": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "patientCopay": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "pricingLogic": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "enum": [
+                    "Conservative",
+                    "Base",
+                    "Optimistic"
+                  ]
+                },
+                "price": {
+                  "type": "number"
+                },
+                "patientNumber": {
+                  "type": "number"
+                },
+                "annualRevenue": {
+                  "type": "number"
+                },
+                "reimbursementRate": {
+                  "type": "number"
+                },
+                "npv": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "name",
+                "price",
+                "patientNumber",
+                "annualRevenue",
+                "reimbursementRate",
+                "npv"
+              ]
+            }
+          }
+        },
+        "required": [
+          "referencePrice",
+          "competitorPrices",
+          "dailyCost",
+          "monthlyCost",
+          "annualCost",
+          "expectedReimbursementPrice",
+          "patientCopay",
+          "pricingLogic",
+          "scenarios"
+        ]
+      },
+      "part8": {
+        "type": "object",
+        "properties": {
+          "strategy": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "item": {
+                  "type": "string"
+                },
+                "applicable": {
+                  "type": "boolean"
+                },
+                "detail": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "item",
+                "applicable",
+                "detail"
+              ]
+            }
+          },
+          "expectedApprovalDate": {
+            "type": "string"
+          },
+          "bridgingRequired": {
+            "type": "boolean"
+          },
+          "bridgingNote": {
+            "type": "string"
+          },
+          "fastTrackOptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "riskMatrix": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "probability": {
+                  "type": "number"
+                },
+                "impact": {
+                  "type": "number"
+                },
+                "riskScore": {
+                  "type": "number"
+                },
+                "level": {
+                  "type": "string",
+                  "enum": [
+                    "LOW",
+                    "MODERATE",
+                    "HIGH",
+                    "CRITICAL"
+                  ]
+                },
+                "mitigation": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "category",
+                "probability",
+                "impact",
+                "riskScore",
+                "level",
+                "mitigation"
+              ]
+            }
+          }
+        },
+        "required": [
+          "strategy",
+          "expectedApprovalDate",
+          "bridgingRequired",
+          "bridgingNote",
+          "fastTrackOptions",
+          "riskMatrix"
+        ]
+      },
+      "part9": {
+        "type": "object",
+        "properties": {
+          "inputs": {
+            "type": "object",
+            "properties": {
+              "developmentCost": {
+                "type": "number"
+              },
+              "clinicalCost": {
+                "type": "number"
+              },
+              "regulatoryCost": {
+                "type": "number"
+              },
+              "cmcCost": {
+                "type": "number"
+              },
+              "launchCost": {
+                "type": "number"
+              },
+              "marketingCost": {
+                "type": "number"
+              },
+              "manufacturingCostRatio": {
+                "type": "number"
+              },
+              "expectedPrice": {
+                "type": "number"
+              },
+              "patientNumber": {
+                "type": "number"
+              },
+              "marketShare": {
+                "type": "number"
+              },
+              "grossMargin": {
+                "type": "number"
+              },
+              "sgaRatio": {
+                "type": "number"
+              },
+              "taxRate": {
+                "type": "number"
+              },
+              "discountRate": {
+                "type": "number"
+              },
+              "probabilityByStage": {
+                "type": "object",
+                "properties": {
+                  "preclinical": {
+                    "type": "number"
+                  },
+                  "phase1": {
+                    "type": "number"
+                  },
+                  "phase2": {
+                    "type": "number"
+                  },
+                  "phase3": {
+                    "type": "number"
+                  },
+                  "nda": {
+                    "type": "number"
+                  },
+                  "launch": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "preclinical",
+                  "phase1",
+                  "phase2",
+                  "phase3",
+                  "nda",
+                  "launch"
+                ]
+              },
+              "launchYear": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "developmentCost",
+              "clinicalCost",
+              "regulatoryCost",
+              "cmcCost",
+              "launchCost",
+              "marketingCost",
+              "manufacturingCostRatio",
+              "expectedPrice",
+              "patientNumber",
+              "marketShare",
+              "grossMargin",
+              "sgaRatio",
+              "taxRate",
+              "discountRate",
+              "probabilityByStage",
+              "launchYear"
+            ]
+          },
+          "yearlyData": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "year": {
+                  "type": "string"
+                },
+                "revenue": {
+                  "type": "number"
+                },
+                "cogs": {
+                  "type": "number"
+                },
+                "sga": {
+                  "type": "number"
+                },
+                "developmentCost": {
+                  "type": "number"
+                },
+                "tax": {
+                  "type": "number"
+                },
+                "fcf": {
+                  "type": "number"
+                },
+                "discountedFcf": {
+                  "type": "number"
+                },
+                "cumulativeFcf": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "year",
+                "revenue",
+                "cogs",
+                "sga",
+                "developmentCost",
+                "tax",
+                "fcf",
+                "discountedFcf",
+                "cumulativeFcf"
+              ]
+            }
+          },
+          "npv": {
+            "type": "number"
+          },
+          "riskAdjustedNpv": {
+            "type": "number"
+          },
+          "irr": {
+            "type": "number"
+          },
+          "breakEvenYear": {
+            "type": "number",
+            "nullable": true
+          },
+          "probabilityOfSuccess": {
+            "type": "number"
+          },
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "enum": [
+                    "Conservative",
+                    "Base",
+                    "Optimistic"
+                  ]
+                },
+                "revenue": {
+                  "type": "number"
+                },
+                "ebitda": {
+                  "type": "number"
+                },
+                "npv": {
+                  "type": "number"
+                },
+                "riskAdjustedNpv": {
+                  "type": "number"
+                },
+                "breakEvenYear": {
+                  "type": "number",
+                  "nullable": true
+                },
+                "marketShare": {
+                  "type": "number"
+                },
+                "price": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "name",
+                "revenue",
+                "ebitda",
+                "npv",
+                "riskAdjustedNpv",
+                "breakEvenYear",
+                "marketShare",
+                "price"
+              ]
+            }
+          },
+          "sensitivityItems": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "variable": {
+                  "type": "string"
+                },
+                "low": {
+                  "type": "number"
+                },
+                "base": {
+                  "type": "number"
+                },
+                "high": {
+                  "type": "number"
+                },
+                "impact": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "variable",
+                "low",
+                "base",
+                "high",
+                "impact"
+              ]
+            }
+          }
+        },
+        "required": [
+          "inputs",
+          "yearlyData",
+          "npv",
+          "riskAdjustedNpv",
+          "breakEvenYear",
+          "probabilityOfSuccess",
+          "scenarios",
+          "sensitivityItems"
+        ]
+      },
+      "part10": {
+        "type": "object",
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": [
+              "DEVELOP",
+              "CONDITIONAL_DEVELOP",
+              "HOLD",
+              "DO_NOT_DEVELOP"
+            ]
+          },
+          "decisionRationale": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "developmentScore": {
+            "type": "number"
+          },
+          "scoreBreakdown": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "weight": {
+                  "type": "number"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "weightedScore": {
+                  "type": "number"
+                },
+                "rationale": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "category",
+                "weight",
+                "score",
+                "weightedScore",
+                "rationale"
+              ]
+            }
+          },
+          "executiveSummaryText": {
+            "type": "string"
+          },
+          "keyRisks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "keyOpportunities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "decision",
+          "decisionRationale",
+          "developmentScore",
+          "scoreBreakdown",
+          "executiveSummaryText",
+          "keyRisks",
+          "keyOpportunities"
+        ]
+      },
+      "part11": {
+        "type": "object",
+        "properties": {
+          "references": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "category": {
+                  "type": "string",
+                  "enum": [
+                    "other",
+                    "clinical",
+                    "regulatory",
+                    "patent",
+                    "market",
+                    "guideline",
+                    "academic",
+                    "financial"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "authors": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "year": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "doi": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "category",
+                "title",
+                "source"
+              ]
+            }
+          }
+        },
+        "required": [
+          "references"
+        ]
+      },
+      "riskPanel": {
+        "type": "object",
+        "properties": {
+          "overall": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "clinical": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "regulatory": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "patent": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "market": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "pricing": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "financial": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          }
+        },
+        "required": [
+          "overall",
+          "clinical",
+          "regulatory",
+          "patent",
+          "market",
+          "pricing",
+          "financial"
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "createdAt",
+      "updatedAt",
+      "isDemoData",
+      "input",
+      "sources",
+      "part1",
+      "part2",
+      "part3",
+      "part4",
+      "part5",
+      "part6",
+      "part7",
+      "part8",
+      "part9",
+      "part10",
+      "part11",
+      "riskPanel"
+    ]
+  },
+  "ProductInfo": {
+    "type": "object",
+    "properties": {
+      "innName": {
+        "type": "string"
+      },
+      "brandName": {
+        "type": "string"
+      },
+      "developer": {
+        "type": "string"
+      },
+      "manufacturer": {
+        "type": "string"
+      },
+      "pharmacologicalClass": {
+        "type": "string"
+      },
+      "mechanismOfAction": {
+        "type": "string"
+      },
+      "routeOfAdministration": {
+        "type": "string"
+      },
+      "dosageForm": {
+        "type": "string"
+      },
+      "strength": {
+        "type": "string"
+      },
+      "firstApprovalCountry": {
+        "type": "string"
+      },
+      "firstApprovalDate": {
+        "type": "string"
+      },
+      "koreaApprovalDate": {
+        "type": "string"
+      },
+      "approvedIndications": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "dosageAndAdministration": {
+        "type": "string"
+      },
+      "pms": {
+        "type": "string"
+      },
+      "reexaminationPeriod": {
+        "type": "string"
+      },
+      "exclusivity": {
+        "type": "string"
+      },
+      "patents": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "reimbursementStatus": {
+        "type": "string"
+      },
+      "price": {
+        "type": "string"
+      },
+      "competitors": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "innName",
+      "brandName",
+      "developer",
+      "manufacturer",
+      "pharmacologicalClass",
+      "mechanismOfAction",
+      "routeOfAdministration",
+      "dosageForm",
+      "strength",
+      "firstApprovalCountry",
+      "firstApprovalDate",
+      "koreaApprovalDate",
+      "approvedIndications",
+      "dosageAndAdministration",
+      "pms",
+      "reexaminationPeriod",
+      "exclusivity",
+      "patents",
+      "reimbursementStatus",
+      "price",
+      "competitors"
+    ]
+  },
+  "Part1Overview": {
+    "type": "object",
+    "properties": {
+      "productSummary": {
+        "type": "string"
+      },
+      "developmentBackground": {
+        "type": "string"
+      },
+      "targetDisease": {
+        "type": "string"
+      },
+      "currentTreatmentLimitations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "developmentNecessity": {
+        "type": "string"
+      },
+      "developmentObjective": {
+        "type": "string"
+      },
+      "targetProductProfile": {
+        "type": "object",
+        "properties": {
+          "indication": {
+            "type": "string"
+          },
+          "patientPopulation": {
+            "type": "string"
+          },
+          "therapeuticLine": {
+            "type": "string"
+          },
+          "administrationRoute": {
+            "type": "string"
+          },
+          "dosingFrequency": {
+            "type": "string"
+          },
+          "safetyProfile": {
+            "type": "string"
+          },
+          "efficacyTarget": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "indication",
+          "patientPopulation",
+          "therapeuticLine",
+          "administrationRoute",
+          "dosingFrequency",
+          "safetyProfile",
+          "efficacyTarget"
+        ]
+      },
+      "developmentDirection": {
+        "type": "string"
+      },
+      "whyThisProduct": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "productSummary",
+      "developmentBackground",
+      "targetDisease",
+      "currentTreatmentLimitations",
+      "developmentNecessity",
+      "developmentObjective",
+      "targetProductProfile",
+      "developmentDirection",
+      "whyThisProduct"
+    ]
+  },
+  "Part3Academic": {
+    "type": "object",
+    "properties": {
+      "diseaseOverview": {
+        "type": "object",
+        "properties": {
+          "definition": {
+            "type": "string"
+          },
+          "prevalence": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "incidence": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "patientNumber": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "diseaseBurden": {
+            "type": "string"
+          },
+          "mortalityRate": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          },
+          "marketSize": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "actual",
+                  "estimate",
+                  "assumption",
+                  "unavailable",
+                  "user_input"
+                ]
+              },
+              "sourceId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "status"
+            ]
+          }
+        },
+        "required": [
+          "definition",
+          "prevalence",
+          "incidence",
+          "patientNumber",
+          "diseaseBurden",
+          "mortalityRate",
+          "marketSize"
+        ]
+      },
+      "mechanismOfAction": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string"
+          },
+          "pathway": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "target": {
+            "type": "string"
+          },
+          "drugEffect": {
+            "type": "string"
+          },
+          "biologicalEffect": {
+            "type": "string"
+          },
+          "clinicalOutcome": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "summary",
+          "pathway",
+          "target",
+          "drugEffect",
+          "biologicalEffect",
+          "clinicalOutcome"
+        ]
+      },
+      "standardOfCare": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "line": {
+              "type": "string"
+            },
+            "treatments": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "duration": {
+              "type": "string"
+            },
+            "responseRate": {
+              "type": "string"
+            },
+            "majorSideEffects": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "line",
+            "treatments",
+            "duration",
+            "responseRate",
+            "majorSideEffects",
+            "limitations"
+          ]
+        }
+      },
+      "guidelinePositions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "guideline": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "recommendedLine": {
+              "type": "string"
+            },
+            "recommendationGrade": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            },
+            "sourceId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "guideline",
+            "version",
+            "recommendedLine",
+            "recommendationGrade",
+            "note",
+            "sourceId"
+          ]
+        }
+      },
+      "therapeuticPositioning": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "efficacy": {
+              "type": "number"
+            },
+            "unmetNeed": {
+              "type": "number"
+            },
+            "marketShare": {
+              "type": "number"
+            },
+            "color": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "efficacy",
+            "unmetNeed",
+            "color"
+          ]
+        }
+      }
+    },
+    "required": [
+      "diseaseOverview",
+      "mechanismOfAction",
+      "standardOfCare",
+      "guidelinePositions",
+      "therapeuticPositioning"
+    ]
+  },
+  "Part4Clinical": {
+    "type": "object",
+    "properties": {
+      "trials": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "studyName": {
+              "type": "string"
+            },
+            "clinicalTrialsId": {
+              "type": "string"
+            },
+            "phase": {
+              "type": "string"
+            },
+            "design": {
+              "type": "string"
+            },
+            "randomization": {
+              "type": "string"
+            },
+            "blinding": {
+              "type": "string"
+            },
+            "population": {
+              "type": "string"
+            },
+            "sampleSize": {
+              "type": "number"
+            },
+            "intervention": {
+              "type": "string"
+            },
+            "comparator": {
+              "type": "string"
+            },
+            "primaryEndpoint": {
+              "type": "string"
+            },
+            "secondaryEndpoints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "followUp": {
+              "type": "string"
+            },
+            "endpoints": {
+              "type": "object",
+              "properties": {
+                "pfs": {
+                  "type": "string"
+                },
+                "os": {
+                  "type": "string"
+                },
+                "orr": {
+                  "type": "string"
+                },
+                "dor": {
+                  "type": "string"
+                },
+                "hr": {
+                  "type": "string"
+                },
+                "ci95": {
+                  "type": "string"
+                },
+                "pValue": {
+                  "type": "string"
+                }
+              },
+              "required": []
+            },
+            "safety": {
+              "type": "object",
+              "properties": {
+                "grade3PlusAE": {
+                  "type": "string"
+                },
+                "sae": {
+                  "type": "string"
+                },
+                "discontinuation": {
+                  "type": "string"
+                },
+                "deathRate": {
+                  "type": "string"
+                },
+                "majorSafetySignals": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "majorSafetySignals"
+              ]
+            },
+            "isPivotal": {
+              "type": "boolean"
+            },
+            "reference": {
+              "type": "string"
+            },
+            "doi": {
+              "type": "string"
+            },
+            "pubmedUrl": {
+              "type": "string"
+            },
+            "sourceId": {
+              "type": "string"
+            },
+            "refIds": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "studyName",
+            "phase",
+            "design",
+            "randomization",
+            "blinding",
+            "population",
+            "sampleSize",
+            "intervention",
+            "comparator",
+            "primaryEndpoint",
+            "secondaryEndpoints",
+            "followUp",
+            "endpoints",
+            "safety",
+            "isPivotal",
+            "reference",
+            "sourceId"
+          ]
+        }
+      },
+      "competitorComparison": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "productName": {
+              "type": "string"
+            },
+            "orr": {
+              "type": "string"
+            },
+            "medianPfs": {
+              "type": "string"
+            },
+            "medianOs": {
+              "type": "string"
+            },
+            "hr": {
+              "type": "string"
+            },
+            "grade3PlusAE": {
+              "type": "string"
+            },
+            "discontinuation": {
+              "type": "string"
+            },
+            "studyName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "productName",
+            "studyName"
+          ]
+        }
+      },
+      "crossTrialWarning": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "trials",
+      "competitorComparison",
+      "crossTrialWarning"
+    ]
+  },
+  "Part5Market": {
+    "type": "object",
+    "properties": {
+      "yearlyData": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "year": {
+              "type": "number"
+            },
+            "globalMarketSize": {
+              "type": "number"
+            },
+            "koreaMarketSize": {
+              "type": "number"
+            },
+            "prescribedPatients": {
+              "type": "number"
+            },
+            "marketShare": {
+              "type": "number"
+            },
+            "salesRevenue": {
+              "type": "number"
+            },
+            "isActual": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "year",
+            "globalMarketSize",
+            "koreaMarketSize",
+            "isActual"
+          ]
+        }
+      },
+      "cagr5Year": {
+        "type": "number"
+      },
+      "globalMarketLatest": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "koreaMarketLatest": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "competitors": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "inn": {
+              "type": "string"
+            },
+            "company": {
+              "type": "string"
+            },
+            "sales": {
+              "type": "number"
+            },
+            "marketShare": {
+              "type": "number"
+            },
+            "patentExpiry": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            },
+            "efficacyScore": {
+              "type": "number"
+            },
+            "priceScore": {
+              "type": "number"
+            },
+            "marketSizeUSD": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "name",
+            "inn",
+            "company"
+          ]
+        }
+      },
+      "treatmentCostAnnual": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "patientGrowthRate": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "majorCountryMarkets": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "share": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "country",
+            "size",
+            "share"
+          ]
+        }
+      }
+    },
+    "required": [
+      "yearlyData",
+      "cagr5Year",
+      "globalMarketLatest",
+      "koreaMarketLatest",
+      "competitors",
+      "treatmentCostAnnual",
+      "patientGrowthRate",
+      "majorCountryMarkets"
+    ]
+  },
+  "Part6Patent": {
+    "type": "object",
+    "properties": {
+      "patents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "patentNo": {
+              "type": "string"
+            },
+            "applicationNo": {
+              "type": "string"
+            },
+            "applicant": {
+              "type": "string"
+            },
+            "priorityDate": {
+              "type": "string"
+            },
+            "filingDate": {
+              "type": "string"
+            },
+            "grantDate": {
+              "type": "string"
+            },
+            "expirationDate": {
+              "type": "string"
+            },
+            "jurisdiction": {
+              "type": "string"
+            },
+            "patentType": {
+              "type": "string",
+              "enum": [
+                "combination",
+                "compound",
+                "composition",
+                "formulation",
+                "polymorph",
+                "salt",
+                "method_of_treatment",
+                "use_patent",
+                "manufacturing",
+                "dosage_regimen"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "granted",
+                "pending",
+                "expired",
+                "abandoned"
+              ]
+            },
+            "keyClaims": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "riskLevel": {
+              "type": "string",
+              "enum": [
+                "LOW",
+                "MODERATE",
+                "HIGH",
+                "CRITICAL"
+              ]
+            },
+            "riskNote": {
+              "type": "string"
+            },
+            "refIds": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "patentNo",
+            "applicationNo",
+            "applicant",
+            "priorityDate",
+            "filingDate",
+            "grantDate",
+            "expirationDate",
+            "jurisdiction",
+            "patentType",
+            "status",
+            "keyClaims",
+            "riskLevel",
+            "riskNote"
+          ]
+        }
+      },
+      "ftoAnalysis": {
+        "type": "object",
+        "properties": {
+          "coreCompound": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "formulation": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "usePatent": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "combination": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "manufacturing": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "patentTerm": {
+            "type": "string"
+          },
+          "spcPte": {
+            "type": "string"
+          },
+          "litigationHistory": {
+            "type": "string"
+          },
+          "orangeBookStatus": {
+            "type": "string"
+          },
+          "koreaPatentStatus": {
+            "type": "string"
+          },
+          "overallFTORisk": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MODERATE",
+              "HIGH",
+              "CRITICAL"
+            ]
+          },
+          "disclaimer": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "coreCompound",
+          "formulation",
+          "usePatent",
+          "combination",
+          "manufacturing",
+          "patentTerm",
+          "spcPte",
+          "litigationHistory",
+          "orangeBookStatus",
+          "koreaPatentStatus",
+          "overallFTORisk",
+          "disclaimer"
+        ]
+      },
+      "expectedLaunchYear": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "patents",
+      "ftoAnalysis",
+      "expectedLaunchYear"
+    ]
+  },
+  "Part7Pricing": {
+    "type": "object",
+    "properties": {
+      "referencePrice": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "sameMoleculePrice": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "sameClassPrice": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "competitorPrices": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "price"
+          ]
+        }
+      },
+      "dailyCost": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "monthlyCost": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "annualCost": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "expectedReimbursementPrice": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "patientCopay": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "actual",
+              "estimate",
+              "assumption",
+              "unavailable",
+              "user_input"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "status"
+        ]
+      },
+      "pricingLogic": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "scenarios": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "Conservative",
+                "Base",
+                "Optimistic"
+              ]
+            },
+            "price": {
+              "type": "number"
+            },
+            "patientNumber": {
+              "type": "number"
+            },
+            "annualRevenue": {
+              "type": "number"
+            },
+            "reimbursementRate": {
+              "type": "number"
+            },
+            "npv": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "name",
+            "price",
+            "patientNumber",
+            "annualRevenue",
+            "reimbursementRate",
+            "npv"
+          ]
+        }
+      }
+    },
+    "required": [
+      "referencePrice",
+      "competitorPrices",
+      "dailyCost",
+      "monthlyCost",
+      "annualCost",
+      "expectedReimbursementPrice",
+      "patientCopay",
+      "pricingLogic",
+      "scenarios"
+    ]
+  },
+  "Part8Regulatory": {
+    "type": "object",
+    "properties": {
+      "strategy": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "item": {
+              "type": "string"
+            },
+            "applicable": {
+              "type": "boolean"
+            },
+            "detail": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "item",
+            "applicable",
+            "detail"
+          ]
+        }
+      },
+      "expectedApprovalDate": {
+        "type": "string"
+      },
+      "bridgingRequired": {
+        "type": "boolean"
+      },
+      "bridgingNote": {
+        "type": "string"
+      },
+      "fastTrackOptions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "riskMatrix": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string"
+            },
+            "probability": {
+              "type": "number"
+            },
+            "impact": {
+              "type": "number"
+            },
+            "riskScore": {
+              "type": "number"
+            },
+            "level": {
+              "type": "string",
+              "enum": [
+                "LOW",
+                "MODERATE",
+                "HIGH",
+                "CRITICAL"
+              ]
+            },
+            "mitigation": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "category",
+            "probability",
+            "impact",
+            "riskScore",
+            "level",
+            "mitigation"
+          ]
+        }
+      }
+    },
+    "required": [
+      "strategy",
+      "expectedApprovalDate",
+      "bridgingRequired",
+      "bridgingNote",
+      "fastTrackOptions",
+      "riskMatrix"
+    ]
+  },
+  "NPVInputs": {
+    "type": "object",
+    "properties": {
+      "developmentCost": {
+        "type": "number"
+      },
+      "clinicalCost": {
+        "type": "number"
+      },
+      "regulatoryCost": {
+        "type": "number"
+      },
+      "cmcCost": {
+        "type": "number"
+      },
+      "launchCost": {
+        "type": "number"
+      },
+      "marketingCost": {
+        "type": "number"
+      },
+      "manufacturingCostRatio": {
+        "type": "number"
+      },
+      "expectedPrice": {
+        "type": "number"
+      },
+      "patientNumber": {
+        "type": "number"
+      },
+      "marketShare": {
+        "type": "number"
+      },
+      "grossMargin": {
+        "type": "number"
+      },
+      "sgaRatio": {
+        "type": "number"
+      },
+      "taxRate": {
+        "type": "number"
+      },
+      "discountRate": {
+        "type": "number"
+      },
+      "probabilityByStage": {
+        "type": "object",
+        "properties": {
+          "preclinical": {
+            "type": "number"
+          },
+          "phase1": {
+            "type": "number"
+          },
+          "phase2": {
+            "type": "number"
+          },
+          "phase3": {
+            "type": "number"
+          },
+          "nda": {
+            "type": "number"
+          },
+          "launch": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "preclinical",
+          "phase1",
+          "phase2",
+          "phase3",
+          "nda",
+          "launch"
+        ]
+      },
+      "launchYear": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "developmentCost",
+      "clinicalCost",
+      "regulatoryCost",
+      "cmcCost",
+      "launchCost",
+      "marketingCost",
+      "manufacturingCostRatio",
+      "expectedPrice",
+      "patientNumber",
+      "marketShare",
+      "grossMargin",
+      "sgaRatio",
+      "taxRate",
+      "discountRate",
+      "probabilityByStage",
+      "launchYear"
+    ]
+  },
+  "Part10Conclusion": {
+    "type": "object",
+    "properties": {
+      "decision": {
+        "type": "string",
+        "enum": [
+          "DEVELOP",
+          "CONDITIONAL_DEVELOP",
+          "HOLD",
+          "DO_NOT_DEVELOP"
+        ]
+      },
+      "decisionRationale": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "conditions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "developmentScore": {
+        "type": "number"
+      },
+      "scoreBreakdown": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string"
+            },
+            "weight": {
+              "type": "number"
+            },
+            "score": {
+              "type": "number"
+            },
+            "weightedScore": {
+              "type": "number"
+            },
+            "rationale": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "category",
+            "weight",
+            "score",
+            "weightedScore",
+            "rationale"
+          ]
+        }
+      },
+      "executiveSummaryText": {
+        "type": "string"
+      },
+      "keyRisks": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "keyOpportunities": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "decision",
+      "decisionRationale",
+      "developmentScore",
+      "scoreBreakdown",
+      "executiveSummaryText",
+      "keyRisks",
+      "keyOpportunities"
+    ]
+  },
+  "Part11References": {
+    "type": "object",
+    "properties": {
+      "references": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "other",
+                "clinical",
+                "regulatory",
+                "patent",
+                "market",
+                "guideline",
+                "academic",
+                "financial"
+              ]
+            },
+            "title": {
+              "type": "string"
+            },
+            "authors": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "year": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "doi": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "category",
+            "title",
+            "source"
+          ]
+        }
+      }
+    },
+    "required": [
+      "references"
+    ]
+  },
+  "RiskPanel": {
+    "type": "object",
+    "properties": {
+      "overall": {
+        "type": "string",
+        "enum": [
+          "LOW",
+          "MODERATE",
+          "HIGH",
+          "CRITICAL"
+        ]
+      },
+      "clinical": {
+        "type": "string",
+        "enum": [
+          "LOW",
+          "MODERATE",
+          "HIGH",
+          "CRITICAL"
+        ]
+      },
+      "regulatory": {
+        "type": "string",
+        "enum": [
+          "LOW",
+          "MODERATE",
+          "HIGH",
+          "CRITICAL"
+        ]
+      },
+      "patent": {
+        "type": "string",
+        "enum": [
+          "LOW",
+          "MODERATE",
+          "HIGH",
+          "CRITICAL"
+        ]
+      },
+      "market": {
+        "type": "string",
+        "enum": [
+          "LOW",
+          "MODERATE",
+          "HIGH",
+          "CRITICAL"
+        ]
+      },
+      "pricing": {
+        "type": "string",
+        "enum": [
+          "LOW",
+          "MODERATE",
+          "HIGH",
+          "CRITICAL"
+        ]
+      },
+      "financial": {
+        "type": "string",
+        "enum": [
+          "LOW",
+          "MODERATE",
+          "HIGH",
+          "CRITICAL"
+        ]
+      }
+    },
+    "required": [
+      "overall",
+      "clinical",
+      "regulatory",
+      "patent",
+      "market",
+      "pricing",
+      "financial"
+    ]
+  }
+}

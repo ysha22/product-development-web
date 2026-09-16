@@ -28,7 +28,7 @@ export function Part3Academic({ report }: Props) {
       </div>
 
       {/* 3-1 Disease Overview */}
-      <SectionCard title="3-1. Disease Overview" badge={<EvidenceBadge level="A" />}>
+      <SectionCard title="3-1. Disease Overview" badge={<EvidenceBadge level={report.isDemoData ? "A" : "F"} />}>
         <p className="text-sm text-gray-700 leading-relaxed mb-4">{p.diseaseOverview.definition}</p>
         <div className="grid grid-cols-3 gap-3">
           {[
@@ -89,7 +89,7 @@ export function Part3Academic({ report }: Props) {
       </SectionCard>
 
       {/* 3-3 Standard of Care */}
-      <SectionCard title="3-3. Current Standard of Care" subtitle="진료지침 기준 치료 알고리즘" badge={<EvidenceBadge level="C" />}>
+      <SectionCard title="3-3. Current Standard of Care" subtitle="진료지침 기준 치료 알고리즘" badge={<EvidenceBadge level={report.isDemoData ? "C" : "F"} />}>
         <div className="space-y-0">
           {p.standardOfCare.map((line, idx) => (
             <div key={line.line}>
@@ -129,7 +129,7 @@ export function Part3Academic({ report }: Props) {
       </SectionCard>
 
       {/* 3-4 Guideline Position */}
-      <SectionCard title="3-4. Guideline Position" badge={<EvidenceBadge level="C" />} noPad>
+      <SectionCard title="3-4. Guideline Position" badge={<EvidenceBadge level={report.isDemoData ? "C" : "F"} />} noPad>
         <table className="table-professional">
           <thead>
             <tr>

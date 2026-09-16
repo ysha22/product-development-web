@@ -1,83 +1,56 @@
-# 💊 PharmaDD Dashboard
+# PharmaDD Dashboard
 
-Google Gemini AI 기반 의약품 개발 Due Diligence 보고서 자동 생성 웹앱
+GPT(OpenAI), Claude(Anthropic), Gemini(Google)로 의약품 개발 타당성 보고서 초안을 생성하고 저장·검토하는 웹앱입니다.
 
----
+## 사용 흐름
 
-## ⚡ 가장 쉬운 사용법 (Node.js 불필요)
+1. `dist/index.html`을 브라우저로 엽니다.
+2. 성분명과 개발유형을 입력합니다.
+3. 같은 성분·개발유형의 보고서가 보관함에 있으면 **저장 보고서 열기**로 API 없이 엽니다. 같은 성분을 다시 분석하려면 **새로 분석 (API 사용)**을 선택합니다.
+4. 새 성분은 **새 성분 분석 설정 → 제공사/모델/API 키 입력 → 진행 내용 확인 → 분석 진행** 순서로 진행합니다. 최종 버튼 전에는 API 요청이 발생하지 않습니다.
+5. 보고서 생성과 재무 입력 변경 시 브라우저 보관함에 자동 저장됩니다. 보고서 상단의 **보고서 저장 (JSON)**으로 파일을 백업할 수 있습니다.
+6. **새 성분 / 보관함 → 보고서 불러오기 (JSON)**에서 저장한 파일을 엽니다. 불러오기에는 API가 필요하지 않습니다. PDF·Excel은 열람/출력용이고, 앱에서 다시 열 수 있는 형식은 JSON입니다.
 
-1. 이 저장소에서 **`dist/index.html`** 파일 다운로드
-2. 브라우저로 파일 열기 (더블클릭)
-3. 우측 상단 **🔑 API Key** 버튼 → Gemini API Key 입력
-4. 의약품 이름 검색 → 보고서 생성
+## API 연결
 
-> Node.js, npm, 서버 설치 불필요. 파일 하나로 어떤 컴퓨터에서도 동작해요.
+| 선택 | 기본 모델 | 방식 |
+| --- | --- | --- |
+| GPT (OpenAI) | gpt-4.1-mini | Responses API |
+| Claude (Anthropic) | claude-sonnet-4-6 | Messages API |
+| Gemini (Google) | gemini-3.6-flash | Google GenAI SDK |
 
----
+모델 ID는 API 계정에서 접근 가능한 모델로 변경할 수 있습니다. 모든 모델과 계정 조합을 실호출 검증한 것은 아닙니다. 제공사 변경 시 키 입력은 비워집니다. 키는 이번 분석과 실패 단계 재시도를 위한 메모리에만 보관하고, 보고서 JSON이나 브라우저 보관함에는 저장하지 않습니다. 이전 버전에서 저장한 Gemini 키는 자동으로 사용하지 않습니다.
 
-## 🔑 Gemini API Key 발급 (무료)
+이 단일 HTML 앱은 브라우저에서 선택한 제공사로 직접 요청합니다. API 키를 배포 파일에 포함하지 마세요. 조직의 브라우저/CORS 제한에 따라 연결이 차단될 수 있으며, 공개 서비스로 운영할 때는 별도의 서버에서 키를 관리하는 구조가 필요합니다.
 
-1. [Google AI Studio](https://aistudio.google.com/apikey) 접속
-2. Google 계정으로 로그인
-3. **"Create API Key"** 클릭 → `AIza...` 형식의 키 복사
-4. 앱에서 입력
+보고서당 기본 5회 요청하며 자동 재시도나 제공사/모델 자동 전환은 하지 않습니다. 같은 성분·개발유형·제공사·모델에서 중간 실패한 경우 완료된 단계를 재사용합니다. 새로고침/창 닫기 후 부분 결과는 유지되지 않습니다. 완성 보고서는 브라우저 보관함 또는 JSON 파일에서 다시 열 수 있습니다.
 
----
+공식 연동 문서: [OpenAI Responses](https://developers.openai.com/api/docs/guides/text), [Claude Messages](https://platform.claude.com/docs/en/build-with-claude/working-with-messages), [Gemini 한도](https://ai.google.dev/gemini-api/docs/rate-limits).
 
-## 🚀 개발자용 로컬 실행
+## 저장 범위
 
-### 1. Node.js 설치
+- 브라우저 보관함은 현재 브라우저 및 앱 주소/파일 위치에 종속됩니다. 브라우저 데이터 삭제나 파일 이동에 대비해 JSON으로 백업하세요.
+- 저장 공간이 부족하거나 저장이 차단되면 화면에 알립니다. 현재 보고서는 계속 검토하고 JSON으로 저장할 수 있습니다.
+- 불러오기는 PharmaDD 버전 1 JSON 형식과 전체 보고서 구조를 검사합니다. 손상된 파일, 알 수 없는 버전, 5MB 초과 파일은 거부합니다.
+- 같은 성분 판별은 검색어·저장된 INN·제품명의 정확한 문자열 비교를 사용하며 대소문자와 앞뒤/연속 공백은 무시합니다. 번역명이나 별칭을 자동으로 추론하지 않습니다.
+- 같은 보고서의 재무 수정은 그 보고서에 저장됩니다. 같은 성분의 새 분석은 별도 보고서로 보관합니다.
 
-[nodejs.org](https://nodejs.org) 에서 **LTS 버전** 다운로드 후 설치
+## 보고서와 재무 모델의 범위
 
-### 2. 프로젝트 클론 및 실행
+원문 검색·조회·출처 검증은 아직 연결되지 않았습니다. AI 내용과 참고문헌은 미검증 초안이며, 임상·특허의 미검증 참고문헌 번호 연결은 표시하지 않습니다. 실제 보고서에 데모 데이터는 병합하지 않습니다.
 
-```bash
-git clone https://github.com/ysha22/product-development-web.git
-cd product-development-web
-npm install
+재무 입력 변경은 요약·차트·Excel에 반영됩니다. AI 결론 문구와 Part 7 약가 시나리오는 재작성되지 않습니다. 단위는 억원이며, 개발·임상·허가·CMC 비용 전액을 출시 전년에 반영하고 마케팅비는 출시 후 5년간 50/20/10/10/10%로 배분합니다. 총이익률로 원가율을 산출하고 보고서 작성연도 기준으로 할인합니다. 위험조정 NPV는 `NPV × 단계별 성공확률의 곱`의 단순 모델이며 IRR은 미산출(N/A)입니다.
+
+## 개발 및 검증
+
+```sh
+npm ci
 npm run dev
-```
-
-브라우저에서 **http://localhost:5173** 접속
-
-### 3. 단일 HTML 파일 빌드
-
-```bash
+npm test
+npm run lint
 npm run build
-# dist/index.html 생성됨
 ```
 
----
+빌드 결과는 단일 파일 `dist/index.html`입니다. `npm test`는 실제 API를 사용하지 않는 회귀 테스트 20개입니다. 저장 파일 왕복, 저장소 장애, 자격증명 제외, 진행 확인, 제공사별 요청/응답 처리와 기존 재무 계산을 검증합니다. 실제 API 계정별 연결은 사용자 키로 분석할 때 확인해야 합니다.
 
-## 📦 주요 기술 스택
-
-| 역할 | 라이브러리 |
-|---|---|
-| UI 프레임워크 | React 19 + TypeScript |
-| 빌드 도구 | Vite 8 + vite-plugin-singlefile |
-| 스타일 | Tailwind CSS |
-| 차트 | Recharts |
-| AI | Google Gemini 3.6 Flash |
-| PDF 출력 | jsPDF + html2canvas |
-| Excel 출력 | xlsx |
-
----
-
-## 📁 프로젝트 구조
-
-```
-src/
-├── components/
-│   ├── executive/   # 종합 요약 컴포넌트
-│   ├── input/       # 검색폼, 로딩, 에러 화면
-│   ├── layout/      # TopBar, Sidebar, RiskPanel
-│   ├── parts/       # 보고서 Part 1~10
-│   └── shared/      # 공통 컴포넌트 (Badge 등)
-├── services/
-│   └── aiService.ts # Gemini API 호출 및 보고서 조립
-├── utils/
-│   └── exportUtils.ts # PDF / Excel 다운로드
-├── types/           # TypeScript 타입 정의
-└── data/            # 데모 데이터
-```
+타입 변경 후 `npm run schema:generate`로 런타임 검증 스키마를 갱신하세요.

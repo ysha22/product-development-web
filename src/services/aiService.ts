@@ -1,14 +1,14 @@
 /**
- * AI Service – Google Gemini 기반 의약품 DD 보고서 자동 생성
+ * AI Service – GPT / Claude / Gemini 기반 의약품 DD 보고서 자동 생성
  *
  * 전략:
  * - 보고서를 5개 청크로 나눠 순차 호출 (토큰 한도 대응)
  * - 각 청크는 독립적인 JSON Schema를 가짐
  * - 모든 응답은 ReportData 타입으로 병합
- * - 모델 폴백: gemini-3.6-flash → gemini-3.5-flash-lite
+ * - 사용자가 확인한 제공사와 모델로만 호출
  */
 
-import { GoogleGenAI } from '@google/genai';
+import { callProvider, PROVIDERS, type AISettings } from './providers';
 import type {
   ReportData,
   Part1Overview,
@@ -22,7 +22,9 @@ import type {
   Part11References,
   RiskPanel,
 } from '../types';
-import { DEMO_REPORT } from '../data/mockData';
+import { calculateFinancial } from '../utils/financial';
+import { parseChunk, validate } from './validation';
+import type { ProductInfo, NPVInputs, DevelopmentType } from '../types';
 
 export type ProgressStep =
   | 'searching'
@@ -68,7 +70,8 @@ CRITICAL RULES:
 4. If data is truly unknown, use "Data unavailable" as the value string.
 5. All dates must be in YYYY-MM-DD format.
 6. Korean text is preferred for Korean-specific fields; English for global fields.
-7. Numbers should be realistic and consistent (market sizes in USD millions, Korean market in 억원).`;
+7. Do not claim verification or invent sources. Unknown lists must be empty.
+8. Numbers should be realistic and consistent (market sizes in USD millions, Korean market in 억원).`;
 
 /* ── JSON 청크별 프롬프트 생성 ── */
 
@@ -374,239 +377,91 @@ Return JSON for FINANCIAL MODEL and CONCLUSION:
 }`;
 }
 
-/* ── Gemini API 호출 (자동 폴백) ── */
-const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash-lite'];
-
-async function callGemini(
-  apiKey: string,
-  userPrompt: string,
-): Promise<string> {
-  const ai = new GoogleGenAI({ apiKey });
-  let lastError: Error = new Error('알 수 없는 오류');
-
-  for (const model of GEMINI_MODELS) {
-    try {
-      const response = await ai.models.generateContent({
-        model,
-        contents: `${SYSTEM_PROMPT}\n\n${userPrompt}`,
-        config: {
-          temperature: 0.2,
-          maxOutputTokens: 8192,
-          responseMimeType: 'application/json',
-        },
-      });
-
-      const text = response.text;
-      if (!text) throw new Error('Gemini API 응답이 비어있습니다.');
-      return text;
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error(String(err));
-      const msg = lastError.message;
-      // 503(과부하) 또는 404(모델 없음)일 때만 다음 모델로 폴백
-      const shouldFallback = msg.includes('503') || msg.includes('UNAVAILABLE')
-        || msg.includes('404') || msg.includes('NOT_FOUND')
-        || msg.includes('no longer available');
-      if (!shouldFallback) throw lastError; // 인증 오류 등은 즉시 throw
-      // 다음 모델 시도
-    }
-  }
-
-  throw lastError;
+export interface ReportCheckpoint {
+  query: string;
+  devType: string;
+  chunks: Record<string, unknown>[];
+  provider?: string;
+  model?: string;
 }
 
-function safeParseJSON(raw: string): Record<string, unknown> {
-  try {
-    return JSON.parse(raw) as Record<string, unknown>;
-  } catch {
-    // GPT sometimes wraps in ```json … ```
-    const match = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (match) return JSON.parse(match[1]) as Record<string, unknown>;
-    throw new Error('AI 응답을 JSON으로 파싱할 수 없습니다.');
-  }
-}
-
-/* ── NPV 연도별 데이터 계산 ── */
-function buildNPVYearData(inputs: import('../types').NPVInputs) {
-  const r = inputs.discountRate / 100;
-  const totalDevCost = inputs.developmentCost + inputs.clinicalCost +
-    inputs.regulatoryCost + inputs.cmcCost;
-  const baseRevenue = (inputs.expectedPrice * inputs.patientNumber *
-    (inputs.marketShare / 100)) / 1e8;
-
-  const RAMPS = [0, 0.4, 0.7, 0.9, 1.0, 1.0];
-  let cumFCF = 0;
-
-  return RAMPS.map((ramp, idx) => {
-    const calYear = inputs.launchYear - 1 + idx;
-    const rev = idx === 0 ? 0 : baseRevenue * ramp;
-    const cogs = -(rev * inputs.manufacturingCostRatio / 100);
-    const sga  = -(rev * inputs.sgaRatio / 100);
-    const devCostY = idx === 0 ? -(totalDevCost * 0.45)
-      : idx === 1 ? -(inputs.launchCost + inputs.marketingCost * 0.5)
-      : idx === 2 ? -(inputs.marketingCost * 0.3)
-      : -(inputs.marketingCost * 0.1);
-    const ebit = rev + cogs + sga + devCostY;
-    const tax  = ebit > 0 ? -(ebit * inputs.taxRate / 100) : 0;
-    const fcf  = ebit + tax;
-    const discFcf = fcf / Math.pow(1 + r, idx);
-    cumFCF += discFcf;
-
-    return {
-      year: `Year ${idx} (${calYear})`,
-      revenue:        Math.round(rev),
-      cogs:           Math.round(cogs),
-      sga:            Math.round(sga),
-      developmentCost:Math.round(devCostY),
-      tax:            Math.round(tax),
-      fcf:            Math.round(fcf),
-      discountedFcf:  Math.round(discFcf),
-      cumulativeFcf:  Math.round(cumFCF),
-    };
-  });
-}
-
-/* ── 메인 조회 함수 ── */
+// The caller owns the checkpoint; no API key or report is persisted to disk.
 export async function fetchDrugReport(
   query: string,
-  devType: string,
+  devType: DevelopmentType,
   apiKey: string,
   onProgress: (state: ProgressState) => void,
+  checkpoint: ReportCheckpoint = { query, devType, chunks: [] },
+  settings: AISettings = {provider:'gemini', model:PROVIDERS.gemini.model, apiKey},
 ): Promise<ReportData> {
-
-  const report: ReportData = JSON.parse(JSON.stringify(DEMO_REPORT)) as ReportData;
-  report.id = `report-${Date.now()}`;
-  report.createdAt = new Date().toISOString().slice(0, 10);
-  report.updatedAt = new Date().toISOString().slice(0, 10);
-  report.isDemoData = false;
-  report.input.productName = query;
-  report.input.innName = query;
-  report.input.developmentType = devType as import('../types').DevelopmentType;
-
-  /* ── Step 1: Product Info + Part1 ── */
-  onProgress({ step: 'searching', ...STEPS.searching });
-  await delay(300);
-  onProgress({ step: 'product_info', ...STEPS.product_info, detail: '제품명·성분명·허가현황 분석' });
-
-  const raw1 = await callGemini(apiKey, chunk1Prompt(query, devType));
-  const d1 = safeParseJSON(raw1) as Record<string, unknown>;
-
-  // Merge product info (Part2 = ProductInfo)
-  const p2Fields = [
-    'innName','brandName','developer','manufacturer',
-    'pharmacologicalClass','mechanismOfAction','routeOfAdministration',
-    'dosageForm','strength','firstApprovalCountry','firstApprovalDate',
-    'koreaApprovalDate','approvedIndications','dosageAndAdministration',
-    'pms','reexaminationPeriod','exclusivity','patents',
-    'reimbursementStatus','price','competitors',
-  ] as const;
-  for (const f of p2Fields) {
-    if (d1[f] !== undefined) {
-      (report.part2 as unknown as Record<string, unknown>)[f] = d1[f];
-    }
+  if (checkpoint.query !== query || checkpoint.devType !== devType ||
+      (checkpoint.provider !== undefined && (checkpoint.provider !== settings.provider || checkpoint.model !== settings.model))) {
+    checkpoint.query = query;
+    checkpoint.devType = devType;
+    checkpoint.chunks = [];
   }
-  if (d1.part1) {
-    report.part1 = { ...report.part1, ...(d1.part1 as Partial<Part1Overview>) };
+  checkpoint.provider=settings.provider; checkpoint.model=settings.model;
+  const chunks = checkpoint.chunks;
+  async function step(index: number, progress: ProgressStep, prompt: string, verify: (d: Record<string, unknown>) => void) {
+    onProgress({ step: progress, ...STEPS[progress], detail: chunks[index] ? '완료된 단계 재사용' : undefined });
+    const data = chunks[index] ?? parseChunk(await callProvider(settings, SYSTEM_PROMPT, prompt));
+    verify(data);
+    chunks[index] = data;
+    return data;
   }
-  // Sync input fields from AI
-  if (d1.innName)    report.input.innName    = d1.innName as string;
-  if (d1.brandName)  report.input.productName = d1.brandName as string;
-
-  /* ── Step 2: Clinical + Academic ── */
-  onProgress({ step: 'clinical', ...STEPS.clinical, detail: '임상시험 · 학술논문 · 진료지침' });
-  const raw2 = await callGemini(apiKey, chunk2Prompt(query, report.input.innName));
-  const d2 = safeParseJSON(raw2) as Record<string, unknown>;
-  if (d2.part3) report.part3 = { ...report.part3, ...(d2.part3 as Partial<Part3Academic>) };
-  if (d2.part4) report.part4 = { ...report.part4, ...(d2.part4 as Partial<Part4Clinical>) };
-
-  /* ── Step 3: Market + Patent ── */
-  onProgress({ step: 'market_patent', ...STEPS.market_patent, detail: '시장규모 · 경쟁제품 · 특허포트폴리오' });
-  const raw3 = await callGemini(apiKey, chunk3Prompt(query, report.input.innName));
-  const d3 = safeParseJSON(raw3) as Record<string, unknown>;
-  if (d3.part5) report.part5 = { ...report.part5, ...(d3.part5 as Partial<Part5Market>) };
-  if (d3.part6) {
-    report.part6 = { ...report.part6, ...(d3.part6 as Partial<Part6Patent>) };
-    report.part6.expectedLaunchYear = report.input.expectedLaunchYear;
-  }
-
-  /* ── Step 4: Pricing + Regulatory ── */
-  onProgress({ step: 'financial', ...STEPS.financial, detail: '약가 · 허가전략 · 리스크 매트릭스' });
-  const raw4 = await callGemini(apiKey, chunk4Prompt(query, report.input.innName, devType));
-  const d4 = safeParseJSON(raw4) as Record<string, unknown>;
-  if (d4.part7) report.part7 = { ...report.part7, ...(d4.part7 as Partial<Part7Pricing>) };
-  if (d4.part8) report.part8 = { ...report.part8, ...(d4.part8 as Partial<Part8Regulatory>) };
-
-  /* ── Step 5: Financial + Conclusion ── */
-  onProgress({ step: 'conclusion', ...STEPS.conclusion, detail: 'NPV · 시나리오 · 개발의사결정' });
-  const raw5 = await callGemini(apiKey, chunk5Prompt(query, report.input.innName));
-  const d5 = safeParseJSON(raw5) as Record<string, unknown>;
-
-  if (d5.part9inputs) {
-    const inp = d5.part9inputs as import('../types').NPVInputs;    report.part9.inputs = { ...report.part9.inputs, ...inp };
-    report.part9.yearlyData = buildNPVYearData(report.part9.inputs);
-    const lastYear = report.part9.yearlyData[report.part9.yearlyData.length - 1];
-    report.part9.npv = lastYear.cumulativeFcf;
-    const pos = Object.values(report.part9.inputs.probabilityByStage)
-      .reduce((a, v) => a * v, 1);
-    report.part9.probabilityOfSuccess = pos;
-    report.part9.riskAdjustedNpv = Math.round(report.part9.npv * pos);
-    // break-even year
-    const bep = report.part9.yearlyData.find((y, i) =>
-      i > 0 && y.cumulativeFcf >= 0 &&
-      report.part9.yearlyData[i - 1].cumulativeFcf < 0
-    );
-    report.part9.breakEvenYear = bep
-      ? parseInt(bep.year.match(/\((\d+)\)/)?.[1] ?? '0')
-      : null;
-    // Rebuild scenarios
-    report.part9.scenarios = buildScenarios(report.part9.inputs);
-  }
-  if (d5.part10) {
-    report.part10 = { ...report.part10, ...(d5.part10 as Partial<Part10Conclusion>) };
-  }
-  if (d5.riskPanel) {
-    report.riskPanel = { ...report.riskPanel, ...(d5.riskPanel as Partial<RiskPanel>) };
-  }
-  if (d5.part11) {
-    report.part11 = { ...report.part11, ...(d5.part11 as Partial<Part11References>) };
-  }
-
-  onProgress({ step: 'done', ...STEPS.done });
-  return report;
-}
-
-function buildScenarios(inp: import('../types').NPVInputs): import('../types').ScenarioResult[] {
-  const CFGS = [
-    { name: 'Conservative' as const, sm: 0.65, pm: 0.88, cm: 1.2, yo: 1  },
-    { name: 'Base'         as const, sm: 1.00, pm: 1.00, cm: 1.0, yo: 0  },
-    { name: 'Optimistic'   as const, sm: 1.35, pm: 1.12, cm: 0.85,yo: -1 },
-  ];
-  return CFGS.map(cfg => {
-    const si = { ...inp,
-      marketShare:     inp.marketShare * cfg.sm,
-      expectedPrice:   inp.expectedPrice * cfg.pm,
-      developmentCost: inp.developmentCost * cfg.cm,
-      launchYear:      inp.launchYear + cfg.yo,
-    };
-    const yd = buildNPVYearData(si);
-    const npv = yd[yd.length - 1].cumulativeFcf;
-    const pos = Object.values(si.probabilityByStage).reduce((a, v) => a * v, 1);
-    const rev = (si.expectedPrice * si.patientNumber * si.marketShare / 100) / 1e8;
-    const bep = yd.find((y, i) =>
-      i > 0 && y.cumulativeFcf >= 0 && yd[i - 1].cumulativeFcf < 0
-    );
-    return {
-      name: cfg.name,
-      revenue: Math.round(rev),
-      ebitda: Math.round(rev * (si.grossMargin / 100 - si.sgaRatio / 100)),
-      npv,
-      riskAdjustedNpv: Math.round(npv * pos),
-      breakEvenYear: bep ? parseInt(bep.year.match(/\((\d+)\)/)?.[1] ?? '0') : null,
-      marketShare: Math.round(si.marketShare),
-      price: si.expectedPrice,
-    };
+  const d1 = await step(0,'product_info',chunk1Prompt(query,devType), d => {
+    validate('ProductInfo',d); validate('Part1Overview',d.part1);
   });
-}
-
-function delay(ms: number) {
-  return new Promise(r => setTimeout(r, ms));
+  const part2 = validate<ProductInfo>('ProductInfo',d1);
+  const part1 = validate<Part1Overview>('Part1Overview',d1.part1);
+  const d2 = await step(1,'clinical',chunk2Prompt(query,part2.innName), d => {
+    validate('Part3Academic',d.part3); validate('Part4Clinical',d.part4);
+  });
+  const d3 = await step(2,'market_patent',chunk3Prompt(query,part2.innName), d => {
+    validate('Part5Market',d.part5); validate('Part6Patent',d.part6);
+  });
+  const d4 = await step(3,'financial',chunk4Prompt(query,part2.innName,devType), d => {
+    validate('Part7Pricing',d.part7); validate('Part8Regulatory',d.part8);
+  });
+  const context = JSON.stringify({developmentType:devType,overview:d1,clinical:d2,market:d3,pricing:d4});
+  const d5 = await step(4,'conclusion',chunk5Prompt(query,part2.innName) +
+    '\nUse the preceding draft sections as context: ' + context +
+    '\nDo not state exact NPV or IRR in narrative: the app calculates financial results separately. References are unverified suggestions. Use grossMargin as the authoritative margin and manufacturingCostRatio = 100 - grossMargin.', d => {
+      validate('NPVInputs',d.part9inputs); validate('Part10Conclusion',d.part10);
+      validate('RiskPanel',d.riskPanel); validate('Part11References',d.part11);
+    });
+  const now = new Date().toISOString().slice(0,10);
+  const part9 = calculateFinancial(validate<NPVInputs>('NPVInputs',d5.part9inputs), Number(now.slice(0,4)));
+  const report: ReportData = {
+    id: 'report-' + Date.now(), createdAt:now, updatedAt:now, isDemoData:false,
+    input: { productName:part2.brandName, innName:part2.innName, developmentType:devType,
+      indication:part1.targetProductProfile.indication, developmentCountry:'미확인', targetMarket:'미확인',
+      expectedLaunchYear:part9.inputs.launchYear, developmentStage:'unknown' },
+    sources:{}, part1, part2,
+    part3:validate<Part3Academic>('Part3Academic',d2.part3),
+    part4:validate<Part4Clinical>('Part4Clinical',d2.part4),
+    part5:validate<Part5Market>('Part5Market',d3.part5),
+    part6:validate<Part6Patent>('Part6Patent',d3.part6),
+    part7:validate<Part7Pricing>('Part7Pricing',d4.part7),
+    part8:validate<Part8Regulatory>('Part8Regulatory',d4.part8), part9,
+    part10:validate<Part10Conclusion>('Part10Conclusion',d5.part10),
+    part11:validate<Part11References>('Part11References',d5.part11),
+    riskPanel:validate<RiskPanel>('RiskPanel',d5.riskPanel),
+  };
+  report.part6.expectedLaunchYear = part9.inputs.launchYear;
+  // No source lookup was performed. Remove unverified links between independent chunks.
+  for (const trial of report.part4.trials) { trial.refIds = []; trial.sourceId = ''; }
+  for (const patent of report.part6.patents) patent.refIds = [];
+  for (const guideline of report.part3.guidelinePositions) guideline.sourceId = '';
+  function markUnverified(value: unknown): void {
+    if (!value || typeof value !== 'object') return;
+    const obj = value as Record<string, unknown>;
+    if (obj.status === 'actual') obj.status = 'estimate';
+    if (obj.isActual === true) obj.isActual = false;
+    if ('sourceId' in obj) obj.sourceId = '';
+    Object.values(obj).forEach(markUnverified);
+  }
+  markUnverified(report);
+  onProgress({ step:'done', ...STEPS.done });
+  return report;
 }

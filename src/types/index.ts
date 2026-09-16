@@ -11,6 +11,7 @@ export type DevelopmentType =
   | 'other';
 
 export type DevelopmentStage =
+  | 'unknown'
   | 'preclinical'
   | 'phase1'
   | 'phase2'
@@ -260,7 +261,7 @@ export interface Part4Clinical {
 export interface MarketYearData {
   year: number;
   globalMarketSize: number;       // USD millions
-  koreaMarketSize: number;        // KRW billions
+  koreaMarketSize: number;        // 억 KRW (100 million KRW)
   prescribedPatients?: number;
   marketShare?: number;
   salesRevenue?: number;
@@ -342,9 +343,9 @@ export interface PricingScenario {
   name: 'Conservative' | 'Base' | 'Optimistic';
   price: number;               // KRW per day or per unit
   patientNumber: number;
-  annualRevenue: number;       // KRW billions
+  annualRevenue: number;       // 억 KRW (100 million KRW)
   reimbursementRate: number;   // %
-  npv: number;                 // KRW billions
+  npv: number;                 // 억 KRW (100 million KRW)
 }
 
 export interface Part7Pricing {
@@ -395,7 +396,7 @@ export interface Part8Regulatory {
 // ============================================================
 
 export interface NPVInputs {
-  developmentCost: number;       // KRW billions
+  developmentCost: number;       // 억 KRW (100 million KRW)
   clinicalCost: number;
   regulatoryCost: number;
   cmcCost: number;

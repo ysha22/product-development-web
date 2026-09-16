@@ -46,7 +46,7 @@ export function Part11References({ report }: Props) {
       <div>
         <h2 className="text-lg font-bold text-gray-900">Part 11. 참고문헌</h2>
         <p className="text-sm text-gray-500 mt-0.5">
-          본 보고서 작성에 활용된 문헌 및 자료 · 번호를 클릭하면 원문으로 이동
+          AI가 제안한 미검증 참고문헌 · 링크의 실재 여부와 본문 일치 여부를 확인하세요
         </p>
       </div>
 

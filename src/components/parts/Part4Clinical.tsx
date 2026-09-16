@@ -56,7 +56,7 @@ function Tooltip({ label, tip, value, color }: { label: string; tip?: string; va
   );
 }
 
-function PivotalCard({ trial }: { trial: ClinicalTrial }) {
+function PivotalCard({ trial, isDemoData }: { trial: ClinicalTrial; isDemoData: boolean }) {
   return (
     <div className="card border-t-4 border-t-blue-600 overflow-hidden">
       {/* Header */}
@@ -169,7 +169,7 @@ function PivotalCard({ trial }: { trial: ClinicalTrial }) {
         {/* Reference */}
         <div className="pt-3 border-t border-gray-100">
           <p className="label-text mb-1.5 flex items-center gap-1">
-            <EvidenceBadge level="B" />
+            <EvidenceBadge level={isDemoData ? "B" : "F"} />
             참고문헌 (Reference)
             <RefBadge ids={trial.refIds} />
           </p>
@@ -252,7 +252,7 @@ export function Part4Clinical({ report }: Props) {
         <p className="text-sm text-gray-500 mt-0.5">임상시험 근거 · 안전성 · 경쟁 제품 비교 (Clinical Evidence · Safety · Competitor Comparison)</p>
       </div>
 
-      {pivotals.map(t => <PivotalCard key={t.id} trial={t} />)}
+      {pivotals.map(t => <PivotalCard isDemoData={report.isDemoData} key={t.id} trial={t} />)}
 
       {others.length > 0 && (
         <div>

@@ -1,6 +1,6 @@
 import { Activity, BarChart2, BookOpen, BookMarked, Building2, ChevronRight, DollarSign, FileText, FlaskConical, Home, LayoutDashboard, Scale, Shield, TrendingUp } from 'lucide-react';
 
-export const NAV_SECTIONS = [
+const NAV_SECTIONS = [
   { id: 'executive',   label: 'Executive Summary',         icon: LayoutDashboard },
   { id: 'part1',       label: '1. 개요 및 목적',              icon: Home },
   { id: 'part2',       label: '2. 제품정보',                  icon: FileText },
